@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
+import 'package:money_management_app/screens/transactions/Screen_transactions.dart';
+import 'Splash_Screen.dart';
 import 'home/Screen_home.dart';
 import 'model/budget/budget_model.dart';
 import 'model/category/category_model.dart';
@@ -12,6 +14,8 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('HomeCarddb');
+  await Hive.openBox('transactionscounter');
+  
   if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
     Hive.registerAdapter(
       CategoryModelAdapter(),

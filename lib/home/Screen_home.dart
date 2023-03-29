@@ -16,6 +16,7 @@ class Screen_home extends StatelessWidget {
     ScreenStats(),
   ];
   static ValueNotifier<int> selectedindexnotifier = ValueNotifier(0);
+  String addtext='Add';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +31,12 @@ class Screen_home extends StatelessWidget {
           return _pages[updatedIndex];
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      
+      floatingActionButton: FloatingActionButton.extended(
+        
         elevation: 30,
         onPressed: () {
+          
           if (selectedindexnotifier.value == 0) {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -43,9 +47,14 @@ class Screen_home extends StatelessWidget {
             );
           } else {
             popup_category(context);
+            addtext='Add Category';
           }
+          
         },
-        child: const Icon(Icons.add),
+        label: Text(addtext),
+        icon: Icon(Icons.add),
+        
+        
       ),
     );
   }

@@ -13,16 +13,19 @@ class Expensecategorylist extends StatelessWidget {
           return ListView.separated(
             itemBuilder: (ctx, index) {
               final category = newlist[index];
-              return Card(
-                elevation: 8,
-                child: ListTile(
-                  tileColor: Colors.grey.shade200,
-                  title: Text(category.name),
-                  trailing: IconButton(
-                    onPressed: () {
-                      CategoryDB.instance.deleteCategory(category.id);
-                    },
-                    icon:const Icon(Icons.delete),
+              return Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Card(
+                  elevation: 8,
+                  child: ListTile(
+                    tileColor: Colors.grey.shade200,
+                    title: Text(category.name),
+                    trailing: IconButton(
+                      onPressed: () {
+                        CategoryDB.instance.deleteCategory(category.id);
+                      },
+                      icon:const Icon(Icons.delete),
+                    ),
                   ),
                 ),
               );

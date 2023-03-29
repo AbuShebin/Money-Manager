@@ -6,20 +6,20 @@ import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
+import 'package:money_management_app/screens/stats/screen_stats.dart';
 import 'package:money_management_app/screens/transactions/Add_transaction.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Screen_transactions extends StatefulWidget {
-  const Screen_transactions({Key? key}) : super(key: key);
+  const  Screen_transactions({Key? key, }) : super(key: key);
 
   @override
   State<Screen_transactions> createState() => _Screen_transactionsState();
 }
 
-final totalincome = 90;
-double income=0;
-double expense=0;
-double totalincomeexpense=0;
+var income;//canged to var frm double
+var expense;//was double
+var totalincomeexpense;//was double
 double incomepercentage=0;
 double expensepercentage=0;
 var totalbalenceTostats;
@@ -39,6 +39,9 @@ class _Screen_transactionsState extends State<Screen_transactions> {
         builder: (BuildContext ctx, List<TransactionModel> newList, Widget? _) {
           //homecard db referencing
           var homecardboxinScreentrans = Hive.box('HomeCarddb');
+
+          //transcounterTable db referencing
+          var transcounterintrans = Hive.box('transactionscounter');
 
           //adding value in initial case
           if (homecardboxinScreentrans.isEmpty) {
@@ -231,10 +234,17 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 'totalBalence',
                                 homecardboxinScreentrans.get('totalBalence') -
                                     amnt);
-                            // cardbox.put('income',
-                            //     cardbox.get('income', defaultValue: 0) - amnt);
+                            
                             homecardboxinScreentrans.put('income',
                                 homecardboxinScreentrans.get('income') - amnt);
+
+                                //incometrans counter...
+                              var  incomedlt=incometrans-1;
+                                transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
+
+                                //overalltrans counter...
+                               var overalldlt=overalltrans-1;
+                               transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                           if (_value.type == CategoryType.expense) {
                             homecardboxinScreentrans.put(
@@ -242,10 +252,16 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 homecardboxinScreentrans.get('totalBalence') +
                                     amnt);
 
-                            // cardbox.put('expense',
-                            //     cardbox.get('expense', defaultValue: 0) - amnt);
                             homecardboxinScreentrans.put('expense',
                                 homecardboxinScreentrans.get('expense') - amnt);
+
+                                //expensetrans counter...
+                                var expensedlt=expensetrans-1;
+                                transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
+
+                                //overalltrans counter...
+                                 var overalldlt=overalltrans-1;
+                               transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                         },
                         icon: Icons.delete,
@@ -262,11 +278,13 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Card(
+                        elevation: 10,
                         child: ListTile(
-                          tileColor: Colors.grey[100],
+                          tileColor: Colors.grey[200],
                           leading: CircleAvatar(
                             child: Text(
                               parseDate(_value.date),
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                             radius: (25),
@@ -294,11 +312,6 @@ class _Screen_transactionsState extends State<Screen_transactions> {
         });
   }
 }
-
-// openbox()async{
-//   await Hive.openBox<TransactionModel>('data');
-//  final box = Hive.box<TransactionModel>('data');
-// }
 
 String parseDate(DateTime date) {
   final _date = DateFormat.MMMd().format(date);

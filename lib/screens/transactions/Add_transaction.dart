@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
+import 'package:money_management_app/screens/transactions/Screen_transactions.dart';
 
 class Add_transaction extends StatefulWidget {
   const Add_transaction({Key? key}) : super(key: key);
@@ -24,6 +24,9 @@ class _Add_transactionState extends State<Add_transaction> {
   double totalbalencetodb = 0;
   double incometodb = 0;
   double expensetodb = 0;
+  double overalltransaction = 0; //
+  double incomeTransaction = 0;
+  double expenseTransaction = 0;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _Add_transactionState extends State<Add_transaction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffe2e7ef),
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         toolbarHeight: 0,
       ),
@@ -46,14 +49,7 @@ class _Add_transactionState extends State<Add_transaction> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              "Add Transaction",
-              style: TextStyle(
-                fontSize: 32.0,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Ubuntu',
-              ),
-            ),
+
             //sizedbox
             const SizedBox(
               height: 10,
@@ -118,7 +114,7 @@ class _Add_transactionState extends State<Add_transaction> {
             ),
 
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
 
             //Radiobutton
@@ -159,7 +155,7 @@ class _Add_transactionState extends State<Add_transaction> {
 
             //Dropdownmenu
             DropdownButton<String>(
-              hint: const Text('select category'),
+              hint: const Text('select category',style: TextStyle(color: Colors.deepPurple),),
               value: _categoryid,
               items: (_selectedcategorytype == CategoryType.income
                       ? CategoryDB().incomeCategoryListlistener
@@ -180,13 +176,16 @@ class _Add_transactionState extends State<Add_transaction> {
                 });
               },
             ),
+
             const SizedBox(
               height: 20,
             ),
+
             //submitbutton
             ElevatedButton(
+              style: ElevatedButton.styleFrom(fixedSize: Size(300, 40)),
               onPressed: () {
-                savebutton();
+                savebutton(context);
               },
               child: const Text('submit'),
             )
@@ -196,7 +195,7 @@ class _Add_transactionState extends State<Add_transaction> {
     );
   }
 
-  Future savebutton() async {
+  Future savebutton(BuildContext ctx) async {
     final _purposeText = _purposecontroller.text;
     final _amountText = _amountcontroller.text;
     final _dropdownid = _categoryid;
@@ -205,10 +204,22 @@ class _Add_transactionState extends State<Add_transaction> {
     }
     */
     if (_amountText.isEmpty) {
-      return;
+      return ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(8),
+          content: Center(child: Text('Amount is required')),
+        ),
+      );
     }
     if (_categoryid == null) {
-      return;
+      return ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(8),
+          content: Center(child: Text('Select category')),
+        ),
+      );
     }
     if (_selectedDate == null) {
       return;
@@ -222,7 +233,7 @@ class _Add_transactionState extends State<Add_transaction> {
       _dropdownid;
     }
 
-      //home card.......
+    //home card.......
     if (_selectedcategorytype == CategoryType.income) {
       totalbalencetodb = totalbalencetodb + _parsedAmount;
       incometodb = incometodb + _parsedAmount;
@@ -236,6 +247,16 @@ class _Add_transactionState extends State<Add_transaction> {
       // addIncomeCard
       homecardboxinAddtrans.put(
           'income', homecardboxinAddtrans.get('income') + incometodb);
+
+      //income transactions counter
+      var transcounterinAddtrans = Hive.box('transactionscounter');
+      incomeTransaction = incomeTransaction + 1;
+      overalltransaction = overalltransaction + 1;
+
+      transcounterinAddtrans.put(
+        'incomecounter',
+        transcounterinAddtrans.get('incomecounter') + incomeTransaction,
+      );
     }
     if (_selectedcategorytype == CategoryType.expense) {
       expensetodb = expensetodb - _parsedAmount;
@@ -250,7 +271,24 @@ class _Add_transactionState extends State<Add_transaction> {
       //subtractExpense
       homecardboxinAddtrans.put(
           'expense', homecardboxinAddtrans.get('expense') - expensetodb);
+
+      //expense transactions counter
+      var transcounterinAddtrans = Hive.box('transactionscounter');
+      expenseTransaction = expenseTransaction + 1;
+      overalltransaction = overalltransaction + 1;
+      transcounterinAddtrans.put(
+        'expensecounter',
+        transcounterinAddtrans.get('expensecounter') + expenseTransaction,
+      );
     }
+
+    //overallcountertoDB
+    var transcounterinAddtrans = Hive.box('transactionscounter');
+    
+    transcounterinAddtrans.put(
+      'overallcounter',
+      transcounterinAddtrans.get('overallcounter')+overalltransaction,
+    );
 
     final _model = TransactionModel(
       purpose: _purposeText,

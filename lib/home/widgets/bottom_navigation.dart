@@ -21,7 +21,7 @@ class bottom_navigation extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
                 currentIndex: updatedindex,
                 selectedItemColor: Colors.deepPurple,
-                unselectedItemColor: Colors.grey,
+                unselectedItemColor: Colors.black,
                 onTap: (newindex) {
                   Screen_home.selectedindexnotifier.value = newindex;
                 },
