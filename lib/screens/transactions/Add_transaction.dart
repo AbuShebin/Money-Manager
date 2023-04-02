@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
+import 'package:money_management_app/gsheets%20api.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
+import 'package:money_management_app/screens/catagory/popup.dart';
 import 'package:money_management_app/screens/transactions/Screen_transactions.dart';
 
 class Add_transaction extends StatefulWidget {
@@ -64,7 +66,7 @@ class _Add_transactionState extends State<Add_transaction> {
                 decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey)),
-                    hintText: 'Enter Amount :',
+                    hintText: '*Enter Amount :',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.w900,
                     )),
@@ -78,7 +80,7 @@ class _Add_transactionState extends State<Add_transaction> {
                 controller: _purposecontroller,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                  hintText: 'title :',
+                  hintText: 'title :    "title is recomended',
                   hintStyle: TextStyle(fontWeight: FontWeight.w500),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
@@ -155,7 +157,10 @@ class _Add_transactionState extends State<Add_transaction> {
 
             //Dropdownmenu
             DropdownButton<String>(
-              hint: const Text('select category',style: TextStyle(color: Colors.deepPurple),),
+              hint: const Text(
+                'select category',
+                style: TextStyle(color: Colors.deepPurple),
+              ),
               value: _categoryid,
               items: (_selectedcategorytype == CategoryType.income
                       ? CategoryDB().incomeCategoryListlistener
@@ -249,14 +254,14 @@ class _Add_transactionState extends State<Add_transaction> {
           'income', homecardboxinAddtrans.get('income') + incometodb);
 
       //income transactions counter
-      var transcounterinAddtrans = Hive.box('transactionscounter');
-      incomeTransaction = incomeTransaction + 1;
-      overalltransaction = overalltransaction + 1;
+      // var transcounterinAddtrans = Hive.box('transactionscounter');
+      // incomeTransaction = incomeTransaction + 1;
+      // overalltransaction = overalltransaction + 1;
 
-      transcounterinAddtrans.put(
-        'incomecounter',
-        transcounterinAddtrans.get('incomecounter') + incomeTransaction,
-      );
+      // transcounterinAddtrans.put(
+      //   'incomecounter',
+      //   transcounterinAddtrans.get('incomecounter') + incomeTransaction,
+      // );
     }
     if (_selectedcategorytype == CategoryType.expense) {
       expensetodb = expensetodb - _parsedAmount;
@@ -273,22 +278,22 @@ class _Add_transactionState extends State<Add_transaction> {
           'expense', homecardboxinAddtrans.get('expense') - expensetodb);
 
       //expense transactions counter
-      var transcounterinAddtrans = Hive.box('transactionscounter');
-      expenseTransaction = expenseTransaction + 1;
-      overalltransaction = overalltransaction + 1;
-      transcounterinAddtrans.put(
-        'expensecounter',
-        transcounterinAddtrans.get('expensecounter') + expenseTransaction,
-      );
+      // var transcounterinAddtrans = Hive.box('transactionscounter');
+      // expenseTransaction = expenseTransaction + 1;
+      // overalltransaction = overalltransaction + 1;
+      // transcounterinAddtrans.put(
+      //   'expensecounter',
+      //   transcounterinAddtrans.get('expensecounter') + expenseTransaction,
+      // );
     }
 
     //overallcountertoDB
-    var transcounterinAddtrans = Hive.box('transactionscounter');
-    
-    transcounterinAddtrans.put(
-      'overallcounter',
-      transcounterinAddtrans.get('overallcounter')+overalltransaction,
-    );
+    // var transcounterinAddtrans = Hive.box('transactionscounter');
+
+    // transcounterinAddtrans.put(
+    //   'overallcounter',
+    //   transcounterinAddtrans.get('overallcounter')+overalltransaction,
+    // );
 
     final _model = TransactionModel(
       purpose: _purposeText,
@@ -299,8 +304,25 @@ class _Add_transactionState extends State<Add_transaction> {
     );
     await TransactionDB.instance.addtransactions(_model);
     Navigator.of(context).pop();
+    _enterTransaction();
     TransactionDB.instance.refresh();
     _amountcontroller.text = '';
     _purposecontroller.text = '';
+  }
+
+  //enter the new transaction into the spreadsheet
+  void _enterTransaction() {
+    String categorytypesheets = _selectedcategorytype.toString();
+    String categorytoSheets;
+    if (_selectedcategorytype == CategoryType.income) {
+      categorytoSheets = 'income';
+    } else {
+      categorytoSheets = 'expense';
+    }
+    GoogleSheetsApi.insert(
+      _purposecontroller.text,
+      _amountcontroller.text,
+      categorytoSheets,
+    );
   }
 }

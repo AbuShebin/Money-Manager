@@ -61,6 +61,8 @@ class _Screen_transactionsState extends State<Screen_transactions> {
           incomefrmDB = homecardboxinScreentrans.get('income');
           expensefrmDB = homecardboxinScreentrans.get('expense');
 
+
+
           //get value frm DB for screen stats
           income=homecardboxinScreentrans.get('income');
           expense=homecardboxinScreentrans.get('expense');
@@ -96,7 +98,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                       height: 10,
                     ),
                     const Text(
-                      'Total Balance',
+                      'B A L A N C E',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22.0,
@@ -207,10 +209,11 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                 Padding(
                   padding: EdgeInsets.only(left: 15, top: 40),
                   child: Text(
-                    "Recent Transactions",
+                    "Recent Transactions...",
                     style: TextStyle(
+                      color: Colors.deepPurple,
                       fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -238,13 +241,13 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                             homecardboxinScreentrans.put('income',
                                 homecardboxinScreentrans.get('income') - amnt);
 
-                                //incometrans counter...
-                              var  incomedlt=incometrans-1;
-                                transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
+                               //incometrans counter...
+                              // var  incomedlt=incometrans-1;
+                              //   transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
 
-                                //overalltrans counter...
-                               var overalldlt=overalltrans-1;
-                               transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
+                              //   //overalltrans counter...
+                              //  var overalldlt=overalltrans-1;
+                              //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                           if (_value.type == CategoryType.expense) {
                             homecardboxinScreentrans.put(
@@ -256,12 +259,12 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 homecardboxinScreentrans.get('expense') - amnt);
 
                                 //expensetrans counter...
-                                var expensedlt=expensetrans-1;
-                                transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
+                              //   var expensedlt=expensetrans-1;
+                              //   transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
 
-                                //overalltrans counter...
-                                 var overalldlt=overalltrans-1;
-                               transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
+                              //   //overalltrans counter...
+                              //    var overalldlt=overalltrans-1;
+                              //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                         },
                         icon: Icons.delete,
@@ -292,9 +295,16 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 ? Colors.green
                                 : Colors.red,
                           ),
-                          title: Text('RS ${_value.amount}'),
-                          subtitle: Text(_value.purpose),
-                          trailing: Text(_value.category.name),
+                          
+                          title: Text('Rs  ${_value.amount}',style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),),
+                          subtitle: Text(_value.purpose,style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),),
+                          trailing: Text(_value.category.name,style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),),
                         ),
                       ),
                     ),

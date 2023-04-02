@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_management_app/home/widgets/bottom_navigation.dart';
 import 'package:money_management_app/screens/budget/screen_budget.dart';
 import 'package:money_management_app/screens/stats/screen_stats.dart';
+import '../screens/more/more.dart';
 import '../screens/transactions/Add_transaction.dart';
 import '../screens/catagory/popup.dart';
 import '../screens/catagory/screen_catagory.dart';
@@ -12,8 +13,8 @@ class Screen_home extends StatelessWidget {
   final _pages = const [
     Screen_transactions(),
     Screen_catagory(),
-    ScreenBudget(),
     ScreenStats(),
+    More_Screen(),
   ];
   static ValueNotifier<int> selectedindexnotifier = ValueNotifier(0);
   String addtext='Add';

@@ -35,13 +35,14 @@ class bottom_navigation extends StatelessWidget {
                     label: 'Category',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.album_outlined),
-                    label: 'Budget',
+                    icon: Icon(Icons.pie_chart),
+                    label: 'Stats',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.pie_chart),
-                    label: 'stats',
+                    icon: Icon(Icons.menu),
+                    label: 'More',
                   ),
+                 
                 ],
               ),
             ),

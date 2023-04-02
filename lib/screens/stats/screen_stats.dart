@@ -68,8 +68,8 @@ class _ScreenStatsState extends State<ScreenStats> {
     }
 
     final List<ChartData> chartData = [
-      ChartData('Income', incomepercentage.toDouble()),
-      ChartData('Expense', expensepercentage.toDouble()),
+      ChartData('Income', incomeonchart.round().toDouble()),
+      ChartData('Expense', expenseonchart.round().toDouble()),
     ];
 
     if(incomepercentage.isNaN || expensepercentage.isNaN){
@@ -126,7 +126,7 @@ class _ScreenStatsState extends State<ScreenStats> {
                   children: [
                     Text("Type",style: TextStyle(fontWeight: FontWeight.bold),textScaleFactor: 1.5,),
                     Text("Amount",style: TextStyle(fontWeight: FontWeight.bold),textScaleFactor: 1.5),
-                    Text("Transactions",style: TextStyle(fontWeight: FontWeight.bold),textScaleFactor: 1.5),
+                    
                   ]
                 ),
                 
@@ -134,21 +134,18 @@ class _ScreenStatsState extends State<ScreenStats> {
                   children: [
                     Text("Income",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w500),textScaleFactor: 1.5),
                     Text(income.round().toString(),textScaleFactor: 1.5),
-                    Text(incometrans.round().toString(),textScaleFactor: 1.5),
                   ]
                 ),
                 TableRow(
                   children: [
                     Text("Expense",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w500),textScaleFactor: 1.5),
                     Text(expense.round().toString(),textScaleFactor: 1.5),
-                    Text(expensetrans.round().toString(),textScaleFactor: 1.5),
                   ]
                 ),
                 TableRow(
                   children: [
                     Text("Overal",style: TextStyle(color: Colors.deepPurple,fontWeight: FontWeight.w500),textScaleFactor: 1.5),
                     Text(overall.round().toString(),textScaleFactor: 1.5),
-                    Text(overalltrans.round().toString(),textScaleFactor: 1.5),
                   ]
                 ),
               ],

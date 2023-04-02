@@ -1,5 +1,9 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:gsheets/gsheets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_management_app/gsheets%20api.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
 import 'package:money_management_app/screens/transactions/Screen_transactions.dart';
@@ -8,8 +12,11 @@ import 'home/Screen_home.dart';
 import 'model/budget/budget_model.dart';
 import 'model/category/category_model.dart';
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GoogleSheetsApi().init();
   //await Firebase.initializeApp();
 
   await Hive.initFlutter();
@@ -51,7 +58,6 @@ Future<void> main() async {
       HomeCardModelAdapter(),
     );
   }
-
   runApp(const MyApp());
 }
 
