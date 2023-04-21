@@ -37,7 +37,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   intl: ^0.17.0
-  path_provider: ^2.0.11
+  path_provider: ^2.0.14
   syncfusion_flutter_charts: ^20.4.42
 
 dev_dependencies:

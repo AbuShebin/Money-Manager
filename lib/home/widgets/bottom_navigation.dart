@@ -38,10 +38,6 @@ class bottom_navigation extends StatelessWidget {
                     icon: Icon(Icons.pie_chart),
                     label: 'Stats',
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.menu),
-                    label: 'More',
-                  ),
                  
                 ],
               ),

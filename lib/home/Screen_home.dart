@@ -14,7 +14,6 @@ class Screen_home extends StatelessWidget {
     Screen_transactions(),
     Screen_catagory(),
     ScreenStats(),
-    More_Screen(),
   ];
   static ValueNotifier<int> selectedindexnotifier = ValueNotifier(0);
   String addtext='Add';

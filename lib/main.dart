@@ -16,7 +16,7 @@ import 'model/category/category_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  GoogleSheetsApi().init();
+  // GoogleSheetsApi().init();
   //await Firebase.initializeApp();
 
   await Hive.initFlutter();

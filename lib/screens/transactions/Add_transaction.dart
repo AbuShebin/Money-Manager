@@ -17,6 +17,9 @@ class Add_transaction extends StatefulWidget {
 
 final _purposecontroller = TextEditingController();
 final _amountcontroller = TextEditingController();
+String titlepurpose ='';
+double amounttext=0;
+int transactions=0;
 
 class _Add_transactionState extends State<Add_transaction> {
   DateTime? _selectedDate;
@@ -304,7 +307,11 @@ class _Add_transactionState extends State<Add_transaction> {
     );
     await TransactionDB.instance.addtransactions(_model);
     Navigator.of(context).pop();
+    //GSheets..
     _enterTransaction();
+    titlepurpose=_purposeText;
+    amounttext=_parsedAmount;
+    transactions=transactions+1;
     TransactionDB.instance.refresh();
     _amountcontroller.text = '';
     _purposecontroller.text = '';
@@ -319,10 +326,10 @@ class _Add_transactionState extends State<Add_transaction> {
     } else {
       categorytoSheets = 'expense';
     }
-    GoogleSheetsApi.insert(
-      _purposecontroller.text,
-      _amountcontroller.text,
-      categorytoSheets,
-    );
-  }
+  GoogleSheetsApi.insert(
+    _purposecontroller.text,
+    _amountcontroller.text,
+    categorytoSheets,
+  );
+}
 }
