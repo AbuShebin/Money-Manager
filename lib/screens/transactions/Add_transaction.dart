@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
-import 'package:money_management_app/gsheets%20api.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
 import 'package:money_management_app/screens/catagory/popup.dart';
@@ -304,11 +303,12 @@ class _Add_transactionState extends State<Add_transaction> {
       date: _selectedDate!,
       type: _selectedcategorytype!,
       category: _selectedcategoryModel!,
+      account_id: ""
     );
     await TransactionDB.instance.addtransactions(_model);
     Navigator.of(context).pop();
     //GSheets..
-    _enterTransaction();
+    // _enterTransaction();
     titlepurpose=_purposeText;
     amounttext=_parsedAmount;
     transactions=transactions+1;
@@ -318,18 +318,18 @@ class _Add_transactionState extends State<Add_transaction> {
   }
 
   //enter the new transaction into the spreadsheet
-  void _enterTransaction() {
-    String categorytypesheets = _selectedcategorytype.toString();
-    String categorytoSheets;
-    if (_selectedcategorytype == CategoryType.income) {
-      categorytoSheets = 'income';
-    } else {
-      categorytoSheets = 'expense';
-    }
-  GoogleSheetsApi.insert(
-    _purposecontroller.text,
-    _amountcontroller.text,
-    categorytoSheets,
-  );
-}
+//   void _enterTransaction() {
+//     String categorytypesheets = _selectedcategorytype.toString();
+//     String categorytoSheets;
+//     if (_selectedcategorytype == CategoryType.income) {
+//       categorytoSheets = 'income';
+//     } else {
+//       categorytoSheets = 'expense';
+//     }
+//   GoogleSheetsApi.insert(
+//     _purposecontroller.text,
+//     _amountcontroller.text,
+//     categorytoSheets,
+//   );
+// }
 }

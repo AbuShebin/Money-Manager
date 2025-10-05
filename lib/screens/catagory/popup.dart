@@ -22,7 +22,7 @@ Future<void> popup_category(BuildContext context) async {
               ),
             ),
           ),
-          Padding(
+          const Padding(
             padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
@@ -41,10 +41,10 @@ Future<void> popup_category(BuildContext context) async {
                 }
                 final _type = selectedcategoryNotifier.value;
                 final _category = CategoryModel(
-                  id: DateTime.now().millisecondsSinceEpoch.toString(),
-                  name: _name,
-                  type: _type,
-                );
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    name: _name,
+                    type: _type,
+                    parentId: null);
                 CategoryDB.instance.insertCategory(_category);
                 Navigator.of(ctx).pop();
                 _namecontroller.text = '';
