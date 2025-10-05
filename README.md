@@ -1,16 +1,6 @@
 # Money Manager
 
-A new Flutter project.
+A application made with flutter, dart and Hive database to get track of your daily income and expense. In this app you can add income/expense and see detailed overview.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://github.com/user-attachments/assets/28f7abb1-075e-4614-be36-23066bec35bf
