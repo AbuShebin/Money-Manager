@@ -303,7 +303,6 @@ class _Add_transactionState extends State<Add_transaction> {
       date: _selectedDate!,
       type: _selectedcategorytype!,
       category: _selectedcategoryModel!,
-      account_id: ""
     );
     await TransactionDB.instance.addtransactions(_model);
     Navigator.of(context).pop();

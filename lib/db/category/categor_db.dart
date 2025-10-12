@@ -8,7 +8,6 @@ abstract class CategoryDB_functions {
   Future<List<CategoryModel>> getcategory();
   Future<void> insertCategory(CategoryModel value);
   Future<void> deleteCategory(String categoryID);
-  
 }
 
 class CategoryDB implements CategoryDB_functions {
@@ -21,11 +20,13 @@ class CategoryDB implements CategoryDB_functions {
       ValueNotifier([]);
   ValueNotifier<List<CategoryModel>> expenseCategoryListlistener =
       ValueNotifier([]);
-      
+
   @override
   Future<void> insertCategory(CategoryModel value) async {
+    print("insert category triggered $value");
     final _categorydb = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    await _categorydb.put(value.id, value);             
+    await _categorydb.put(value.id, value);
+    print("category db after insertion $_categorydb");
     refreshUI();
   }
 
@@ -59,6 +60,4 @@ class CategoryDB implements CategoryDB_functions {
     await _deletebox.delete(categoryID);
     refreshUI();
   }
-  
-  
 }

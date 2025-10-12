@@ -4,11 +4,11 @@ import 'package:money_management_app/core/common/global_variables.dart';
 class CustomTextformfield extends StatelessWidget {
   final String hintTextCustom;
   final String labelTextCustom;
-  CustomTextformfield(
-      {Key? key, required this.hintTextCustom, required this.labelTextCustom})
-      : super(key: key);
+  final TextEditingController titleCOntroller;
 
-  final TextEditingController titleCOntroller = TextEditingController();
+  CustomTextformfield(
+      {Key? key, required this.hintTextCustom, required this.labelTextCustom,required this.titleCOntroller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

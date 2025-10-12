@@ -43,8 +43,7 @@ Future<void> popup_category(BuildContext context) async {
                 final _category = CategoryModel(
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     name: _name,
-                    type: _type,
-                    parentId: null);
+                    type: _type,);
                 CategoryDB.instance.insertCategory(_category);
                 Navigator.of(ctx).pop();
                 _namecontroller.text = '';
