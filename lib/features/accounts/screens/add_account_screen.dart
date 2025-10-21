@@ -31,7 +31,7 @@ class AddAccountScreen extends StatelessWidget {
           final accounts_db = await Hive.openBox("accounts");
           accounts_db.put("key", accountNameController.text);
 
-          print("account added ${accounts_db.get("key")}");
+          print("account added ${accounts_db.toMap()}");
         },
         text: "Save",
         backgroundColor: Palette.primaryColor,

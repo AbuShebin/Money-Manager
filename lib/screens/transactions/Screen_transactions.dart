@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:money_management_app/core/common/global_variables.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
@@ -11,25 +12,25 @@ import 'package:money_management_app/screens/transactions/Add_transaction.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Screen_transactions extends StatefulWidget {
-  const  Screen_transactions({Key? key, }) : super(key: key);
+  const Screen_transactions({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Screen_transactions> createState() => _Screen_transactionsState();
 }
 
-var income;//canged to var frm double
-var expense;//was double
-var totalincomeexpense;//was double
-double incomepercentage=0;
-double expensepercentage=0;
+var income; //canged to var frm double
+var expense; //was double
+var totalincomeexpense; //was double
+double incomepercentage = 0;
+double expensepercentage = 0;
 var totalbalenceTostats;
-
-
 
 class _Screen_transactionsState extends State<Screen_transactions> {
   @override
   Widget build(BuildContext context) {
-    TransactionDB.instance.refresh(); 
+    TransactionDB.instance.refresh();
     CategoryDB.instance.refreshUI();
     var incomefrmDB;
     var expensefrmDB;
@@ -45,7 +46,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
 
           //adding value in initial case
           if (homecardboxinScreentrans.isEmpty) {
-            homecardboxinScreentrans.put('totalBalence', 0); 
+            homecardboxinScreentrans.put('totalBalence', 0);
           }
 
           if (homecardboxinScreentrans.get('income') == null) {
@@ -61,21 +62,19 @@ class _Screen_transactionsState extends State<Screen_transactions> {
           incomefrmDB = homecardboxinScreentrans.get('income');
           expensefrmDB = homecardboxinScreentrans.get('expense');
 
-
-
           //get value frm DB for screen stats
-          income=homecardboxinScreentrans.get('income');
-          expense=homecardboxinScreentrans.get('expense');
-          totalincomeexpense=income+expense;
-          incomepercentage=income/totalincomeexpense*100;
-          expensepercentage=expense/totalincomeexpense*100;
+          income = homecardboxinScreentrans.get('income');
+          expense = homecardboxinScreentrans.get('expense');
+          totalincomeexpense = income + expense;
+          incomepercentage = income / totalincomeexpense * 100;
+          expensepercentage = expense / totalincomeexpense * 100;
 
           //tostats
-          totalbalenceTostats=totalbalencefrmDB;
+          totalbalenceTostats = totalbalencefrmDB;
 
           return Column(children: [
             const SizedBox(
-              height: 10,
+              height: 15,
             ),
             Container(
               width: 400,
@@ -114,8 +113,8 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           fontWeight: FontWeight.w700,
                           color: Colors.white),
                     ),
-                    const SizedBox(
-                      height: 30,
+                     SizedBox(
+                      height: h*0.02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,7 +202,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                 ),
               ),
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
                 Padding(
@@ -237,17 +236,17 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 'totalBalence',
                                 homecardboxinScreentrans.get('totalBalence') -
                                     amnt);
-                            
+
                             homecardboxinScreentrans.put('income',
                                 homecardboxinScreentrans.get('income') - amnt);
 
-                               //incometrans counter...
-                              // var  incomedlt=incometrans-1;
-                              //   transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
+                            //incometrans counter...
+                            // var  incomedlt=incometrans-1;
+                            //   transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
 
-                              //   //overalltrans counter...
-                              //  var overalldlt=overalltrans-1;
-                              //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
+                            //   //overalltrans counter...
+                            //  var overalldlt=overalltrans-1;
+                            //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                           if (_value.type == CategoryType.expense) {
                             homecardboxinScreentrans.put(
@@ -258,13 +257,13 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                             homecardboxinScreentrans.put('expense',
                                 homecardboxinScreentrans.get('expense') - amnt);
 
-                                //expensetrans counter...
-                              //   var expensedlt=expensetrans-1;
-                              //   transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
+                            //expensetrans counter...
+                            //   var expensedlt=expensetrans-1;
+                            //   transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
 
-                              //   //overalltrans counter...
-                              //    var overalldlt=overalltrans-1;
-                              //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
+                            //   //overalltrans counter...
+                            //    var overalldlt=overalltrans-1;
+                            //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
                           }
                         },
                         icon: Icons.delete,
@@ -287,7 +286,10 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           leading: CircleAvatar(
                             child: Text(
                               parseDate(_value.date),
-                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                             radius: (25),
@@ -295,16 +297,24 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                 ? Colors.green
                                 : Colors.red,
                           ),
-                          
-                          title: Text('Rs  ${_value.amount}',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),),
-                          subtitle: Text(_value.purpose,style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),),
-                          trailing: Text(_value.category.name,style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),),
+                          title: Text(
+                            'Rs  ${_value.amount}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            _value.purpose,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          trailing: Text(
+                            _value.category.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),

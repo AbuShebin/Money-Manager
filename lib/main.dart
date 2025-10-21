@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
+import 'package:money_management_app/model/accounts/accounts_model.dart';
 import 'package:money_management_app/model/budget/budget_model.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
@@ -52,6 +53,12 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(HomeCardModelAdapter().typeId)) {
     Hive.registerAdapter(
       HomeCardModelAdapter(),
+    );
+  }
+ 
+  if (!Hive.isAdapterRegistered(AccountsModelAdapter().typeId)) {
+    Hive.registerAdapter(
+      AccountsModelAdapter(),
     );
   }
   runApp(const MyApp());
