@@ -9,8 +9,6 @@ import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
 import 'home/Screen_home.dart';
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // GoogleSheetsApi().init();

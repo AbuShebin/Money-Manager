@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
 import 'package:money_management_app/core/common/widgets/custom_textformfield.dart';
 import 'package:money_management_app/core/theme/theme.dart';
+import 'package:money_management_app/db/account/account_db.dart';
 
 class AddAccountScreen extends StatelessWidget {
   AddAccountScreen({Key? key}) : super(key: key);
@@ -29,9 +30,11 @@ class AddAccountScreen extends StatelessWidget {
       floatingActionButton: CustomElevatedButton(
         onPressed: () async {
           final accounts_db = await Hive.openBox("accounts");
-          accounts_db.put("key", accountNameController.text);
+          accounts_db.add(accountNameController.text);
 
           print("account added ${accounts_db.toMap()}");
+          AccountDBFunctions accountsDBFunctions = AccountDBFunctions();
+          accountDBFunctions().addAccount(accountNameController.text);
         },
         text: "Save",
         backgroundColor: Palette.primaryColor,
