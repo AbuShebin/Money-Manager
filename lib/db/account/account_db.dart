@@ -4,7 +4,6 @@ import 'package:money_management_app/model/accounts/accounts_model.dart';
 
 abstract class AccountDBFunctions {
   Future<void> addAccount({required AccountsModel data});
-  Future<List<AccountsModel>> getAllAccountsList();
   Future<List<AccountsModel>> getAllAccounts();
 }
 
@@ -20,7 +19,7 @@ class AccountDB implements AccountDBFunctions {
   ValueNotifier<List<AccountsModel>> accountsListnotifier = ValueNotifier([]);
 
   @override
-  Future<void> addAccount({required AccountsModel data}) async {
+  Future<bool> addAccount({required AccountsModel data}) async {
     final accountDb = await Hive.openBox<AccountsModel>("accounts_db");
 
     await accountDb.put(data.id, data);
@@ -28,13 +27,15 @@ class AccountDB implements AccountDBFunctions {
     print("✅ Account Inserted: ID = ${accountDb.values}");
 
     await refresh(); // Refresh notifier to update UI
+
+    return true;
   }
 
-  @override
-  Future<List<AccountsModel>> getAllAccountsList() async {
-    final _db = await Hive.openBox<AccountsModel>("accounts_db");
-    return _db.values.toList();
-  }
+  // @override
+  // Future<List<AccountsModel>> getAllAccountsList() async {
+  //   final _db = await Hive.openBox<AccountsModel>("accounts_db");
+  //   return _db.values.toList();
+  // }
 
   Future<void> refresh() async {
     final _list = await getAllAccounts();

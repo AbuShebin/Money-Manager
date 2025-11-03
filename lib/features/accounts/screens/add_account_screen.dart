@@ -29,14 +29,8 @@ class AddAccountScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: CustomElevatedButton(
-        onPressed: () async {
-          AccountDB accountsDB = AccountDB();
-          AccountsModel data = AccountsModel(
-              id: DateTime.now().microsecondsSinceEpoch.toString(),
-              name: accountNameController.text,
-              balance: 500,
-              type: "");
-          accountsDB.addAccount(data: data);
+        onPressed: () {
+          addAccount(context: context);
         },
         text: "Save",
         backgroundColor: Palette.primaryColor,
@@ -46,5 +40,19 @@ class AddAccountScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  addAccount({required BuildContext context}) async {
+    AccountDB accountsDB = AccountDB();
+    AccountsModel data = AccountsModel(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        name: accountNameController.text,
+        balance: 500,
+        type: "");
+    final result = await accountsDB.addAccount(data: data);
+
+    if (result == true) {
+      Navigator.of(context).pop();
+    }
   }
 }

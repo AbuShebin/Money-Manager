@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_management_app/features/accounts/screens/manage_accounts.dart';
+import 'package:money_management_app/features/accounts/screens/accounts_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);

@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
 import 'package:money_management_app/model/accounts/accounts_model.dart';
@@ -59,7 +60,7 @@ Future<void> main() async {
       AccountsModelAdapter(),
     );
   }
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

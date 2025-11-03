@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
+import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
+import 'package:money_management_app/core/common/widgets/custom_date_picker.dart';
+import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
+import 'package:money_management_app/core/theme/theme.dart';
+import 'package:money_management_app/core/utilities/custom_snackBar.dart';
+import 'package:money_management_app/db/account/account_db.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
+import 'package:money_management_app/model/accounts/accounts_model.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
-import 'package:money_management_app/screens/catagory/popup.dart';
-import 'package:money_management_app/screens/transactions/Screen_transactions.dart';
 
 class Add_transaction extends StatefulWidget {
   const Add_transaction({Key? key}) : super(key: key);
@@ -16,9 +23,9 @@ class Add_transaction extends StatefulWidget {
 
 final _purposecontroller = TextEditingController();
 final _amountcontroller = TextEditingController();
-String titlepurpose ='';
-double amounttext=0;
-int transactions=0;
+String titlepurpose = '';
+double amounttext = 0;
+int transactions = 0;
 
 class _Add_transactionState extends State<Add_transaction> {
   DateTime? _selectedDate;
@@ -32,6 +39,14 @@ class _Add_transactionState extends State<Add_transaction> {
   double incomeTransaction = 0;
   double expenseTransaction = 0;
 
+  ///providers
+  final selectedDateProvider = StateProvider<String?>(
+    (ref) => null,
+  );
+  final selectedAccountProvider = StateProvider<AccountsModel?>(
+    (ref) => null,
+  );
+
   @override
   void initState() {
     _selectedcategorytype = CategoryType.expense;
@@ -42,6 +57,9 @@ class _Add_transactionState extends State<Add_transaction> {
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -91,32 +109,19 @@ class _Add_transactionState extends State<Add_transaction> {
             ),
 
             //date
-
-            TextButton.icon(
-              onPressed: () async {
-                final _selectedDateTemp = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                  lastDate: DateTime.now(),
-                );
-                if (_selectedDateTemp == null) {
-                  return;
-                } else {
-                  //print(_selectedDateTemp.toString());
-                  setState(() {
-                    _selectedDate = _selectedDateTemp;
-                  });
-                }
-              },
-              icon: const Icon(Icons.calendar_today),
-              label: Text(
-                _selectedDate == null
-                    ? 'select date'
-                    : _selectedDate.toString(),
-              ),
-            ),
-
+            Consumer(builder: (context, ref, child) {
+              final selectedDate = ref.watch(selectedDateProvider);
+              return CustomElevatedButton(
+                text: selectedDate ?? "Select date",
+                onPressed: () async {
+                  selectDate(ref: ref);
+                },
+                height: h * 0.05,
+                width: w,
+                backgroundColor: Palette.whiteColor,
+                textColor: Palette.blackColor,
+              );
+            }),
             const SizedBox(
               height: 10,
             ),
@@ -158,29 +163,75 @@ class _Add_transactionState extends State<Add_transaction> {
             ),
 
             //Dropdownmenu
-            DropdownButton<String>(
-              hint: const Text(
-                'select category',
-                style: TextStyle(color: Colors.deepPurple),
-              ),
-              value: _categoryid,
-              items: (_selectedcategorytype == CategoryType.income
-                      ? CategoryDB().incomeCategoryListlistener
-                      : CategoryDB().expenseCategoryListlistener)
-                  .value
-                  .map((e) {
-                return DropdownMenuItem(
-                  value: e.id,
-                  child: Text(e.name),
-                  onTap: () {
-                    _selectedcategoryModel = e;
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: w,
+                height: h * .055,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(w * 0.03),
+                  border: Border.all(color: Colors.grey),
+                  color: Palette.backgroundColor,
+                ),
+                child: DropdownButton<String>(
+                  value: _categoryid,
+                  items: (_selectedcategorytype == CategoryType.income
+                          ? CategoryDB().incomeCategoryListlistener
+                          : CategoryDB().expenseCategoryListlistener)
+                      .value
+                      .map((e) {
+                    return DropdownMenuItem(
+                      value: e.id,
+                      child: Text(e.name),
+                      onTap: () {
+                        _selectedcategoryModel = e;
+                      },
+                    );
+                  }).toList(),
+                  onChanged: (selectedvalue) {
+                    setState(() {
+                      _categoryid = selectedvalue;
+                    });
                   },
+                  hint: Text(
+                    "Select category",
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: w * 0.036,
+                        color: Palette.blackColor,
+                        fontWeight: FontWeight.w800),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: h * 0.001,
+            ),
+
+            Consumer(
+              builder: (context, ref, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FutureBuilder(
+                      future: AccountDB.instance.refresh(),
+                      builder: (context, snapshot) {
+                        final accountList =
+                            AccountDB.instance.accountsListnotifier.value;
+                        return CustomSearchableDropdown<AccountsModel>(
+                          hintText: "Select an account",
+                          items: accountList,
+                          displayText: (item) => item.name,
+                          onChanged: (selectedAccount) {
+                            ref.read(selectedAccountProvider.notifier).update(
+                                  (state) => selectedAccount,
+                                );
+                          },
+                          searchHint: "Search for an account",
+                          selectedItem: ref.watch(selectedAccountProvider),
+                        );
+                      }),
                 );
-              }).toList(),
-              onChanged: (selectedvalue) {
-                setState(() {
-                  _categoryid = selectedvalue;
-                });
               },
             ),
 
@@ -189,12 +240,15 @@ class _Add_transactionState extends State<Add_transaction> {
             ),
 
             //submitbutton
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: Size(300, 40)),
-              onPressed: () {
-                savebutton(context);
-              },
-              child: const Text('submit'),
+            Consumer(
+              builder: (context, ref, child) => CustomElevatedButton(
+                  text: "Submit",
+                  onPressed: () {
+                    print("sumbited");
+                    savebutton(context, ref);
+                  },
+                  height: h * 0.05,
+                  width: w),
             )
           ],
         ),
@@ -202,133 +256,118 @@ class _Add_transactionState extends State<Add_transaction> {
     );
   }
 
-  Future savebutton(BuildContext ctx) async {
-    final _purposeText = _purposecontroller.text;
-    final _amountText = _amountcontroller.text;
-    final _dropdownid = _categoryid;
-    /* if (_purposeText.isEmpty) {
-      return;
+  Future savebutton(BuildContext ctx, WidgetRef ref) async {
+    try {
+      final _purposeText = _purposecontroller.text;
+      final _amountText = _amountcontroller.text;
+      final _dropdownid = _categoryid;
+      final selectedAccount = ref.read(selectedAccountProvider);
+      if (selectedAccount == null) {
+        print("selected account is null");
+        return showSnackBar(content: "Select an account", context: context, color: Palette.snackBarErrorColor);
+      }
+      print("print check");
+
+      if (_amountText.isEmpty) {
+        return ScaffoldMessenger.of(ctx).showSnackBar(
+          const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(8),
+            content: Center(child: Text('Amount is required')),
+          ),
+        );
+      }
+      print("print check1");
+
+      if (_categoryid == null) {
+        return ScaffoldMessenger.of(ctx).showSnackBar(
+          const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(8),
+            content: Center(child: Text('Select category')),
+          ),
+        );
+      }
+      if (_selectedDate == null) {
+        return;
+      }
+
+      final _parsedAmount = double.tryParse(_amountText);
+      if (_parsedAmount == null) {
+        return;
+      }
+      if (_selectedcategorytype == CategoryType.expense) {
+        _dropdownid;
+      }
+      print("print check2");
+
+      //home card.......
+      if (_selectedcategorytype == CategoryType.income) {
+        print("print check 3");
+
+        totalbalencetodb = totalbalencetodb + _parsedAmount;
+        incometodb = incometodb + _parsedAmount;
+        //homecard db referencing
+        var homecardboxinAddtrans = Hive.box('HomeCarddb');
+
+        //addTottalBalence
+        homecardboxinAddtrans.put('totalBalence',
+            homecardboxinAddtrans.get('totalBalence') + totalbalencetodb);
+        print("print check 4");
+
+        // addIncomeCard
+        homecardboxinAddtrans.put(
+            'income', homecardboxinAddtrans.get('income') + incometodb);
+        if (_selectedcategorytype == CategoryType.expense) {
+          expensetodb = expensetodb - _parsedAmount;
+          print("print check 5");
+
+          //homecard db referencing
+          var homecardboxinAddtrans = Hive.box('HomeCarddb');
+
+          //subtractTotalBalence
+          homecardboxinAddtrans.put('totalBalence',
+              homecardboxinAddtrans.get('totalBalence') - _parsedAmount);
+
+          //subtractExpense
+          homecardboxinAddtrans.put(
+              'expense', homecardboxinAddtrans.get('expense') - expensetodb);
+        }
+        print("princt check 6 ${selectedAccount.runtimeType}");
+
+        final _model = TransactionModel(
+            purpose: _purposeText,
+            amount: _parsedAmount,
+            date: _selectedDate!,
+            type: _selectedcategorytype!,
+            category: _selectedcategoryModel!,
+            accountsModel: selectedAccount);
+
+        print("accounts model $_model");
+
+        await TransactionDB.instance.addtransactions(_model);
+        Navigator.of(context).pop();
+        //GSheets..
+        // _enterTransaction();
+        titlepurpose = _purposeText;
+        amounttext = _parsedAmount;
+        transactions = transactions + 1;
+        TransactionDB.instance.refresh();
+        _amountcontroller.text = '';
+        _purposecontroller.text = '';
+      }
+    } catch (e) {
+      print(e.toString());
     }
-    */
-    if (_amountText.isEmpty) {
-      return ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(8),
-          content: Center(child: Text('Amount is required')),
-        ),
-      );
-    }
-    if (_categoryid == null) {
-      return ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(8),
-          content: Center(child: Text('Select category')),
-        ),
-      );
-    }
-    if (_selectedDate == null) {
-      return;
-    }
-
-    final _parsedAmount = double.tryParse(_amountText);
-    if (_parsedAmount == null) {
-      return;
-    }
-    if (_selectedcategorytype == CategoryType.expense) {
-      _dropdownid;
-    }
-
-    //home card.......
-    if (_selectedcategorytype == CategoryType.income) {
-      totalbalencetodb = totalbalencetodb + _parsedAmount;
-      incometodb = incometodb + _parsedAmount;
-      //homecard db referencing
-      var homecardboxinAddtrans = Hive.box('HomeCarddb');
-
-      //addTottalBalence
-      homecardboxinAddtrans.put('totalBalence',
-          homecardboxinAddtrans.get('totalBalence') + totalbalencetodb);
-
-      // addIncomeCard
-      homecardboxinAddtrans.put(
-          'income', homecardboxinAddtrans.get('income') + incometodb);
-
-      //income transactions counter
-      // var transcounterinAddtrans = Hive.box('transactionscounter');
-      // incomeTransaction = incomeTransaction + 1;
-      // overalltransaction = overalltransaction + 1;
-
-      // transcounterinAddtrans.put(
-      //   'incomecounter',
-      //   transcounterinAddtrans.get('incomecounter') + incomeTransaction,
-      // );
-    }
-    if (_selectedcategorytype == CategoryType.expense) {
-      expensetodb = expensetodb - _parsedAmount;
-
-      //homecard db referencing
-      var homecardboxinAddtrans = Hive.box('HomeCarddb');
-
-      //subtractTotalBalence
-      homecardboxinAddtrans.put('totalBalence',
-          homecardboxinAddtrans.get('totalBalence') - _parsedAmount);
-
-      //subtractExpense
-      homecardboxinAddtrans.put(
-          'expense', homecardboxinAddtrans.get('expense') - expensetodb);
-
-      //expense transactions counter
-      // var transcounterinAddtrans = Hive.box('transactionscounter');
-      // expenseTransaction = expenseTransaction + 1;
-      // overalltransaction = overalltransaction + 1;
-      // transcounterinAddtrans.put(
-      //   'expensecounter',
-      //   transcounterinAddtrans.get('expensecounter') + expenseTransaction,
-      // );
-    }
-
-    //overallcountertoDB
-    // var transcounterinAddtrans = Hive.box('transactionscounter');
-
-    // transcounterinAddtrans.put(
-    //   'overallcounter',
-    //   transcounterinAddtrans.get('overallcounter')+overalltransaction,
-    // );
-
-    final _model = TransactionModel(
-      purpose: _purposeText,
-      amount: _parsedAmount,
-      date: _selectedDate!,
-      type: _selectedcategorytype!,
-      category: _selectedcategoryModel!,
-    );
-    await TransactionDB.instance.addtransactions(_model);
-    Navigator.of(context).pop();
-    //GSheets..
-    // _enterTransaction();
-    titlepurpose=_purposeText;
-    amounttext=_parsedAmount;
-    transactions=transactions+1;
-    TransactionDB.instance.refresh();
-    _amountcontroller.text = '';
-    _purposecontroller.text = '';
   }
 
-  //enter the new transaction into the spreadsheet
-//   void _enterTransaction() {
-//     String categorytypesheets = _selectedcategorytype.toString();
-//     String categorytoSheets;
-//     if (_selectedcategorytype == CategoryType.income) {
-//       categorytoSheets = 'income';
-//     } else {
-//       categorytoSheets = 'expense';
-//     }
-//   GoogleSheetsApi.insert(
-//     _purposecontroller.text,
-//     _amountcontroller.text,
-//     categorytoSheets,
-//   );
-// }
+  selectDate({required WidgetRef ref}) async {
+    final selectedDateNotifier = ref.read(selectedDateProvider.notifier);
+    final String? _selectedDate =
+        await CustomDatePickerFunction.datePicker(context: context, ref: ref);
+
+    selectedDateNotifier.update(
+      (state) => _selectedDate,
+    );
+  }
 }

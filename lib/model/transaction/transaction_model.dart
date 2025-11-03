@@ -1,4 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
+import 'package:money_management_app/model/accounts/accounts_model.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 
 part 'transaction_model.g.dart';
@@ -17,12 +18,15 @@ class TransactionModel {
   final CategoryModel category;
   @HiveField(5)
   String? id;
+  @HiveField(6)
+  final AccountsModel accountsModel;
   TransactionModel({
     required this.purpose,
     required this.amount,
     required this.date,
     required this.type,
     required this.category,
+    required this.accountsModel
   }) {
     id = DateTime.now().millisecondsSinceEpoch.toString();
   }

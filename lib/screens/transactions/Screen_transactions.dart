@@ -7,9 +7,6 @@ import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
-import 'package:money_management_app/screens/stats/screen_stats.dart';
-import 'package:money_management_app/screens/transactions/Add_transaction.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Screen_transactions extends StatefulWidget {
   const Screen_transactions({
@@ -40,9 +37,6 @@ class _Screen_transactionsState extends State<Screen_transactions> {
         builder: (BuildContext ctx, List<TransactionModel> newList, Widget? _) {
           //homecard db referencing
           var homecardboxinScreentrans = Hive.box('HomeCarddb');
-
-          //transcounterTable db referencing
-          var transcounterintrans = Hive.box('transactionscounter');
 
           //adding value in initial case
           if (homecardboxinScreentrans.isEmpty) {
@@ -113,8 +107,8 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           fontWeight: FontWeight.w700,
                           color: Colors.white),
                     ),
-                     SizedBox(
-                      height: h*0.02,
+                    SizedBox(
+                      height: h * 0.02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,7 +198,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(left: 15, top: 40),
                   child: Text(
@@ -286,10 +280,11 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           leading: CircleAvatar(
                             child: Text(
                               parseDate(_value.date),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 14),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                             radius: (25),
@@ -299,19 +294,19 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           ),
                           title: Text(
                             'Rs  ${_value.amount}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           subtitle: Text(
                             _value.purpose,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           trailing: Text(
                             _value.category.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
