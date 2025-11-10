@@ -46,6 +46,9 @@ class _Add_transactionState extends State<Add_transaction> {
   final selectedAccountProvider = StateProvider<AccountsModel?>(
     (ref) => null,
   );
+  final selectedCategoryProvider = StateProvider<CategoryModel?>(
+    (ref) => null,
+  );
 
   @override
   void initState() {
@@ -84,12 +87,16 @@ class _Add_transactionState extends State<Add_transaction> {
                 controller: _amountcontroller,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey)),
-                    hintText: '*Enter Amount :',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w900,
-                    )),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  hintText: '*Enter Amount :',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w900,
+                  ),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                ),
               ),
             ),
 
@@ -162,47 +169,34 @@ class _Add_transactionState extends State<Add_transaction> {
               ],
             ),
 
-            //Dropdownmenu
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: w,
-                height: h * .055,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(w * 0.03),
-                  border: Border.all(color: Colors.grey),
-                  color: Palette.backgroundColor,
-                ),
-                child: DropdownButton<String>(
-                  value: _categoryid,
-                  items: (_selectedcategorytype == CategoryType.income
-                          ? CategoryDB().incomeCategoryListlistener
-                          : CategoryDB().expenseCategoryListlistener)
-                      .value
-                      .map((e) {
-                    return DropdownMenuItem(
-                      value: e.id,
-                      child: Text(e.name),
-                      onTap: () {
-                        _selectedcategoryModel = e;
-                      },
-                    );
-                  }).toList(),
-                  onChanged: (selectedvalue) {
-                    setState(() {
-                      _categoryid = selectedvalue;
-                    });
-                  },
-                  hint: Text(
-                    "Select category",
-                    style: TextStyle(
-                        fontFamily: 'Urbanist',
-                        fontSize: w * 0.036,
-                        color: Palette.blackColor,
-                        fontWeight: FontWeight.w800),
-                  ),
-                ),
-              ),
+            Consumer(
+              builder: (context, ref, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FutureBuilder(
+                      future: CategoryDB.instance.refreshUI(),
+                      builder: (context, snapshot) {
+                        return CustomDropdown<CategoryModel>(
+                          hintText: "Select a category",
+                          items: _selectedcategorytype == CategoryType.income
+                              ? CategoryDB().incomeCategoryListlistener.value
+                              : CategoryDB().expenseCategoryListlistener.value,
+                          displayText: (item) => item.name,
+                          onChanged: (selectedCategory) {
+                            print(
+                                "selected category Id = ${selectedCategory?.id}");
+                            _selectedcategoryModel = selectedCategory;
+                            _categoryid = selectedCategory?.id;
+                            ref.read(selectedCategoryProvider.notifier).update(
+                                  (state) => selectedCategory,
+                                );
+                          },
+                          searchHint: "Search for a category",
+                          selectedItem: ref.watch(selectedCategoryProvider),
+                        );
+                      }),
+                );
+              },
             ),
 
             SizedBox(
@@ -218,7 +212,7 @@ class _Add_transactionState extends State<Add_transaction> {
                       builder: (context, snapshot) {
                         final accountList =
                             AccountDB.instance.accountsListnotifier.value;
-                        return CustomSearchableDropdown<AccountsModel>(
+                        return CustomDropdown<AccountsModel>(
                           hintText: "Select an account",
                           items: accountList,
                           displayText: (item) => item.name,
@@ -264,7 +258,10 @@ class _Add_transactionState extends State<Add_transaction> {
       final selectedAccount = ref.read(selectedAccountProvider);
       if (selectedAccount == null) {
         print("selected account is null");
-        return showSnackBar(content: "Select an account", context: context, color: Palette.snackBarErrorColor);
+        return showSnackBar(
+            content: "Select an account",
+            context: context,
+            color: Palette.snackBarErrorColor);
       }
       print("print check");
 
@@ -318,46 +315,56 @@ class _Add_transactionState extends State<Add_transaction> {
         // addIncomeCard
         homecardboxinAddtrans.put(
             'income', homecardboxinAddtrans.get('income') + incometodb);
-        if (_selectedcategorytype == CategoryType.expense) {
-          expensetodb = expensetodb - _parsedAmount;
-          print("print check 5");
-
-          //homecard db referencing
-          var homecardboxinAddtrans = Hive.box('HomeCarddb');
-
-          //subtractTotalBalence
-          homecardboxinAddtrans.put('totalBalence',
-              homecardboxinAddtrans.get('totalBalence') - _parsedAmount);
-
-          //subtractExpense
-          homecardboxinAddtrans.put(
-              'expense', homecardboxinAddtrans.get('expense') - expensetodb);
-        }
-        print("princt check 6 ${selectedAccount.runtimeType}");
-
-        final _model = TransactionModel(
-            purpose: _purposeText,
-            amount: _parsedAmount,
-            date: _selectedDate!,
-            type: _selectedcategorytype!,
-            category: _selectedcategoryModel!,
-            accountsModel: selectedAccount);
-
-        print("accounts model $_model");
-
-        await TransactionDB.instance.addtransactions(_model);
-        Navigator.of(context).pop();
-        //GSheets..
-        // _enterTransaction();
-        titlepurpose = _purposeText;
-        amounttext = _parsedAmount;
-        transactions = transactions + 1;
-        TransactionDB.instance.refresh();
-        _amountcontroller.text = '';
-        _purposecontroller.text = '';
       }
+      if (_selectedcategorytype == CategoryType.expense) {
+        expensetodb = expensetodb - _parsedAmount;
+        print("print check 5");
+
+        //homecard db referencing
+        var homecardboxinAddtrans = Hive.box('HomeCarddb');
+
+        //subtractTotalBalence
+        homecardboxinAddtrans.put('totalBalence',
+            homecardboxinAddtrans.get('totalBalence') - _parsedAmount);
+
+        //subtractExpense
+        homecardboxinAddtrans.put(
+            'expense', homecardboxinAddtrans.get('expense') - expensetodb);
+      }
+      print("princt check 6 ${selectedAccount.runtimeType}");
+
+      final _model = TransactionModel(
+          purpose: _purposeText,
+          amount: _parsedAmount,
+          date: _selectedDate!,
+          type: _selectedcategorytype!,
+          category: _selectedcategoryModel!,
+          accountsModel: selectedAccount);
+
+      print("accounts model $_model");
+
+      await TransactionDB.instance.addtransactions(_model).then(
+            (value) => AccountDB.instance.updateAccount(
+                data: AccountsModel(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    name: selectedAccount.name,
+                    balance: selectedAccount.balance,
+                    type: selectedAccount.type)),
+          );
+      Navigator.of(context).pop();
+      //GSheets..
+      // _enterTransaction();
+      titlepurpose = _purposeText;
+      amounttext = _parsedAmount;
+      transactions = transactions + 1;
+      TransactionDB.instance.refresh();
+      _amountcontroller.text = '';
+      _purposecontroller.text = '';
     } catch (e) {
-      print(e.toString());
+      showSnackBar(
+          content: "Something went wrong: ${e.toString()}",
+          context: context,
+          color: Palette.snackBarErrorColor);
     }
   }
 

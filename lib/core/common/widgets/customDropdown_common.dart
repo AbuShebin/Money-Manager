@@ -3,7 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:money_management_app/core/theme/theme.dart';
 
-class CustomSearchableDropdown<T> extends StatefulWidget {
+class CustomDropdown<T> extends StatefulWidget {
   final List<T> items;
   final T? selectedItem;
   final String? Function(T item)? displayText;
@@ -11,7 +11,7 @@ class CustomSearchableDropdown<T> extends StatefulWidget {
   final void Function(T?)? onChanged;
   final String hintText;
 
-  const CustomSearchableDropdown(
+  const CustomDropdown(
       {Key? key,
       required this.items,
       this.selectedItem,
@@ -27,7 +27,7 @@ class CustomSearchableDropdown<T> extends StatefulWidget {
 }
 
 class CustomSearchableDropdownState<T>
-    extends State<CustomSearchableDropdown<T>> {
+    extends State<CustomDropdown<T>> {
   final TextEditingController _dropSearchController = TextEditingController();
 
   @override
@@ -90,44 +90,7 @@ class CustomSearchableDropdownState<T>
                       const BoxDecoration(color: Palette.backgroundColor)),
               menuItemStyleData: MenuItemStyleData(
                 height: h * .06,
-              ),
-              dropdownSearchData: DropdownSearchData(
-                searchController: _dropSearchController,
-                searchInnerWidgetHeight: h * 0.06,
-                searchInnerWidget: Container(
-                  height: h * 0.06,
-                  color: Palette.backgroundColor,
-                  padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                  child: TextFormField(
-                    expands: true,
-                    maxLines: null,
-                    controller: _dropSearchController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: w * 0.03, vertical: 8),
-                      hintText: widget.searchHint ?? 'Search for an item...',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Urbanist',
-                        fontSize: w * 0.036,
-                        color: Palette.blackColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(w * 0.02),
-                      ),
-                    ),
-                  ),
-                ),
-                searchMatchFn: (item, searchValue) {
-                  final String itemText = widget.displayText
-                          ?.call(item.value as T)
-                          ?.toLowerCase() ??
-                      '';
-                  final String searchValueText = searchValue.toLowerCase();
-                  return itemText.contains(searchValueText);
-                },
-              ),
-              onMenuStateChange: (isOpen) {
+              ),      onMenuStateChange: (isOpen) {
                 if (!isOpen) {
                   _dropSearchController.clear();
                 }

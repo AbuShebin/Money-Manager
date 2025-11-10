@@ -5,6 +5,7 @@ import 'package:money_management_app/model/accounts/accounts_model.dart';
 abstract class AccountDBFunctions {
   Future<void> addAccount({required AccountsModel data});
   Future<List<AccountsModel>> getAllAccounts();
+  Future<void> updateAccount({required AccountsModel data});
 }
 
 class AccountDB implements AccountDBFunctions {
@@ -53,5 +54,15 @@ class AccountDB implements AccountDBFunctions {
     });
 
     return _db.values.toList();
+  }
+
+  @override
+  Future<void> updateAccount({required AccountsModel data}) async {
+    final _db = await Hive.openBox<AccountsModel>("accounts_db");
+    if(_db.containsKey(data.id)){
+      _db.putAt(int.parse(data.id), data);
+      refresh();
+    }
+
   }
 }
