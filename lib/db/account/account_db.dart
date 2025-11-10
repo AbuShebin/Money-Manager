@@ -62,24 +62,17 @@ class AccountDB implements AccountDBFunctions {
 
   @override
   Future<void> updateAccount({required AccountsModel data}) async {
-    print("Updating account with ID: ${data.id} $data");
     try{
-      print("101");
       final _db = await Hive.openBox<AccountsModel>("accounts_db");
-      print("102");
 
       if (_db.containsKey(int.parse(data.id))) {
-        print("103");
 
         _db.putAt(int.parse(data.id), data);
-        print("104");
 
         refresh();
-        print("105");
       }
-      print("106");
     }catch(e){
-      print("Error updating account: $e");
+      print(e.toString());
     }
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
 import 'package:money_management_app/core/common/widgets/custom_date_picker.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';

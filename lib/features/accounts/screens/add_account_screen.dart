@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
 import 'package:money_management_app/core/common/widgets/custom_textformfield.dart';
 import 'package:money_management_app/core/theme/theme.dart';
