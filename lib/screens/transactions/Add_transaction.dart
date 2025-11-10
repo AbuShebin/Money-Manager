@@ -346,7 +346,7 @@ class _Add_transactionState extends State<Add_transaction> {
                 data: AccountsModel(
                     id: _model.accountsModel.id,
                     name: selectedAccount.name,
-                    balance: _parsedAmount,
+                    balance: _parsedAmount.toString(),
                     type: selectedAccount.type));
           } catch (e) {
             return showSnackBar(

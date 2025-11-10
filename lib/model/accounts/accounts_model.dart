@@ -11,7 +11,7 @@ class AccountsModel {
   @HiveField(1)
   final String name;
   @HiveField(2)
-  final double balance;
+  final String balance;
   @HiveField(3)
   final String type;
 
@@ -24,7 +24,7 @@ class AccountsModel {
   AccountsModel copyWith({
     String? id,
     String? name,
-    double? balance,
+    String? balance,
     String? type,
   }) {
     return AccountsModel(
@@ -48,7 +48,7 @@ class AccountsModel {
     return AccountsModel(
       id: map['id'] as String,
       name: map['name'] as String,
-      balance: map['balance'] as double,
+      balance: map['balance'] as String,
       type: map['type'] as String,
     );
   }
