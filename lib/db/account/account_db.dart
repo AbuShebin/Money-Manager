@@ -23,7 +23,11 @@ class AccountDB implements AccountDBFunctions {
   Future<bool> addAccount({required AccountsModel data}) async {
     final accountDb = await Hive.openBox<AccountsModel>("accounts_db");
 
-    await accountDb.put(data.id, data);
+   final index = await accountDb.add(data);
+
+   data.id= index.toString();
+   
+   accountDb.putAt(index, data);
 
     print("✅ Account Inserted: ID = ${accountDb.values}");
 
@@ -58,11 +62,24 @@ class AccountDB implements AccountDBFunctions {
 
   @override
   Future<void> updateAccount({required AccountsModel data}) async {
-    final _db = await Hive.openBox<AccountsModel>("accounts_db");
-    if(_db.containsKey(data.id)){
-      _db.putAt(int.parse(data.id), data);
-      refresh();
-    }
+    print("Updating account with ID: ${data.id} $data");
+    try{
+      print("101");
+      final _db = await Hive.openBox<AccountsModel>("accounts_db");
+      print("102");
 
+      if (_db.containsKey(int.parse(data.id))) {
+        print("103");
+
+        _db.putAt(int.parse(data.id), data);
+        print("104");
+
+        refresh();
+        print("105");
+      }
+      print("106");
+    }catch(e){
+      print("Error updating account: $e");
+    }
   }
 }

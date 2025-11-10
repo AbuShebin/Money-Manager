@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
 import 'package:money_management_app/core/common/widgets/custom_date_picker.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
 import 'package:money_management_app/core/theme/theme.dart';
 import 'package:money_management_app/core/utilities/custom_snackBar.dart';
+import 'package:money_management_app/core/utilities/formating/formatDate/format_dateTime.dart';
 import 'package:money_management_app/db/account/account_db.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
@@ -41,7 +43,7 @@ class _Add_transactionState extends State<Add_transaction> {
 
   ///providers
   final selectedDateProvider = StateProvider<String?>(
-    (ref) => null,
+    (ref) => FormatDateTime.dateTimeToDDMMYYYY(DateTime.now()),
   );
   final selectedAccountProvider = StateProvider<AccountsModel?>(
     (ref) => null,
@@ -65,9 +67,7 @@ class _Add_transactionState extends State<Add_transaction> {
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        toolbarHeight: 0,
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Column(
           children: [
@@ -256,37 +256,33 @@ class _Add_transactionState extends State<Add_transaction> {
       final _amountText = _amountcontroller.text;
       final _dropdownid = _categoryid;
       final selectedAccount = ref.read(selectedAccountProvider);
+
+      ///validation
+      if (_amountText.isEmpty) {
+        showSnackBar(
+            content: "Amount is required",
+            context: context,
+            color: Palette.snackBarErrorColor);
+        return;
+      }
+
+      print("print check");
+
+      print("print check1");
+
+      if (_categoryid == null) {
+        return showSnackBar(
+            content: "Select category",
+            context: context,
+            color: Palette.snackBarErrorColor);
+      }
+
       if (selectedAccount == null) {
         print("selected account is null");
         return showSnackBar(
             content: "Select an account",
             context: context,
             color: Palette.snackBarErrorColor);
-      }
-      print("print check");
-
-      if (_amountText.isEmpty) {
-        return ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.all(8),
-            content: Center(child: Text('Amount is required')),
-          ),
-        );
-      }
-      print("print check1");
-
-      if (_categoryid == null) {
-        return ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.all(8),
-            content: Center(child: Text('Select category')),
-          ),
-        );
-      }
-      if (_selectedDate == null) {
-        return;
       }
 
       final _parsedAmount = double.tryParse(_amountText);
@@ -344,13 +340,23 @@ class _Add_transactionState extends State<Add_transaction> {
       print("accounts model $_model");
 
       await TransactionDB.instance.addtransactions(_model).then(
-            (value) => AccountDB.instance.updateAccount(
+        (value) {
+          print("update account triggered ${_parsedAmount}");
+          try {
+            AccountDB.instance.updateAccount(
                 data: AccountsModel(
-                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    id: _model.accountsModel.id,
                     name: selectedAccount.name,
-                    balance: selectedAccount.balance,
-                    type: selectedAccount.type)),
-          );
+                    balance: _parsedAmount,
+                    type: selectedAccount.type));
+          } catch (e) {
+            return showSnackBar(
+                content: "Somenthing went wrong - $e",
+                context: context,
+                color: Palette.snackBarErrorColor);
+          }
+        },
+      );
       Navigator.of(context).pop();
       //GSheets..
       // _enterTransaction();

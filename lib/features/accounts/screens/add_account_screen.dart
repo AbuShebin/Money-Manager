@@ -45,10 +45,10 @@ class AddAccountScreen extends StatelessWidget {
   addAccount({required BuildContext context}) async {
     AccountDB accountsDB = AccountDB();
     AccountsModel data = AccountsModel(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: accountNameController.text,
-        balance: 500,
-        type: "");
+        balance: 0,
+        type: "To be added while creating");
     final result = await accountsDB.addAccount(data: data);
 
     if (result == true) {

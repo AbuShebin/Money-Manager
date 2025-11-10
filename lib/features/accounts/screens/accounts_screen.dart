@@ -27,7 +27,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
       body: ValueListenableBuilder(
         valueListenable: AccountDB.instance.accountsListnotifier,
         builder: (context, List<AccountsModel> data, child) {
-          print("accounts data $data");
+          print("accounts data in account screen - $data");
 
           return data.isEmpty
               ? Center(child: const Text("No accounts data"))
@@ -41,8 +41,13 @@ class _ManageAccountsState extends State<ManageAccounts> {
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(10)
                       ),
-                      child: Center(
-                        child: Text(data[index].name), // Example display
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Text(data[index].name), // Example display
+                          ),
+                          Text(data[index].balance.toString())
+                        ],
                       ),
                     ),
                   ),
