@@ -8,6 +8,7 @@ abstract class TransactionDbFuncions {
   Future<void> addtransactions(TransactionModel obj);
   Future<List<TransactionModel>> getAllTransactions();
   Future<void> deleteTransancion(String id);
+  Future<void> filterTransactionsByDate(DateTime date);
 }
 
 class TransactionDB implements TransactionDbFuncions {
@@ -45,5 +46,26 @@ class TransactionDB implements TransactionDbFuncions {
     final _db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     await _db.delete(id);
     refresh();
+  }
+
+  @override
+  Future<void> filterTransactionsByDate(DateTime date) async {
+    final _db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+    final allTransactions = _db.values.toList();
+
+    final filtered = allTransactions.where((tx) {
+      final txDate = tx.date;
+      return txDate.year == date.year &&
+          txDate.month == date.month &&
+          txDate.day == date.day;
+    }).toList();
+
+    filtered.sort((a, b) => b.date.compareTo(a.date));
+
+    transactionListnotifier.value
+      ..clear()
+      ..addAll(filtered);
+
+    transactionListnotifier.notifyListeners();
   }
 }

@@ -201,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
+  day_navigator:
+    dependency: "direct main"
+    description:
+      name: day_navigator
+      sha256: de7c62bc8bb52fb0eaa8b44546c64e2380554fb9dcbd8d0c803542eb1df48e98
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.8"
   dropdown_button2:
     dependency: "direct main"
     description:

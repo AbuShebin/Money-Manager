@@ -29,7 +29,6 @@ double amounttext = 0;
 int transactions = 0;
 
 class _Add_transactionState extends State<Add_transaction> {
-  DateTime? _selectedDate;
   CategoryType? _selectedcategorytype;
   CategoryModel? _selectedcategoryModel;
   String? _categoryid;
@@ -41,8 +40,8 @@ class _Add_transactionState extends State<Add_transaction> {
   double expenseTransaction = 0;
 
   ///providers
-  final selectedDateProvider = StateProvider<String?>(
-    (ref) => FormatDateTime.dateTimeToDDMMYYYY(DateTime.now()),
+  final selectedDateProvider = StateProvider<DateTime?>(
+    (ref) => DateTime.now(),
   );
   final selectedAccountProvider = StateProvider<AccountsModel?>(
     (ref) => null,
@@ -54,7 +53,6 @@ class _Add_transactionState extends State<Add_transaction> {
   @override
   void initState() {
     _selectedcategorytype = CategoryType.expense;
-    _selectedDate = DateTime.now();
 
     super.initState();
   }
@@ -117,8 +115,9 @@ class _Add_transactionState extends State<Add_transaction> {
             //date
             Consumer(builder: (context, ref, child) {
               final selectedDate = ref.watch(selectedDateProvider);
+
               return CustomElevatedButton(
-                text: selectedDate ?? "Select date",
+                text: FormatDateTime.dateTimeToDDMMYYYY(selectedDate??DateTime.now()),
                 onPressed: () async {
                   selectDate(ref: ref);
                 },
@@ -255,6 +254,7 @@ class _Add_transactionState extends State<Add_transaction> {
       final _amountText = _amountcontroller.text;
       final _dropdownid = _categoryid;
       final selectedAccount = ref.read(selectedAccountProvider);
+      final selectedDate  = ref.read(selectedDateProvider);
 
       ///validation
       if (_amountText.isEmpty) {
@@ -331,7 +331,7 @@ class _Add_transactionState extends State<Add_transaction> {
       final _model = TransactionModel(
           purpose: _purposeText,
           amount: _parsedAmount,
-          date: _selectedDate!,
+          date: selectedDate??DateTime.now(),
           type: _selectedcategorytype!,
           category: _selectedcategoryModel!,
           accountsModel: selectedAccount);
@@ -375,8 +375,8 @@ class _Add_transactionState extends State<Add_transaction> {
 
   selectDate({required WidgetRef ref}) async {
     final selectedDateNotifier = ref.read(selectedDateProvider.notifier);
-    final String? _selectedDate =
-        await CustomDatePickerFunction.datePicker(context: context, ref: ref);
+    final DateTime? _selectedDate =
+        await showDatePicker(context: context, firstDate: DateTime(2000), lastDate: DateTime(2050));
 
     selectedDateNotifier.update(
       (state) => _selectedDate,

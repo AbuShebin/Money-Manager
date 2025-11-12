@@ -24,7 +24,6 @@ class Screenhome extends StatelessWidget {
     w = MediaQuery.of(context).size.height;
     
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         toolbarHeight: 0,
       ),

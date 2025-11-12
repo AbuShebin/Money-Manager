@@ -1,4 +1,7 @@
+import 'package:day_navigator/day_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +28,10 @@ double expensepercentage = 0;
 var totalbalenceTostats;
 
 class _Screen_transactionsState extends State<Screen_transactions> {
+  ///providers
+  final selectedDateProvider = StateProvider<DateTime>(
+    (ref) => DateTime.now(),
+  );
   @override
   Widget build(BuildContext context) {
     TransactionDB.instance.refresh();
@@ -71,258 +78,249 @@ class _Screen_transactionsState extends State<Screen_transactions> {
               height: 15,
             ),
             Container(
-              width: 400,
-              height: 190,
               margin: const EdgeInsets.only(left: 15, right: 15),
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Colors.deepPurple,
-                    Colors.blueAccent,
-                  ]),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(24),
-                  ),
-                ),
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      'B A L A N C E',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          color: Colors.white),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Rs ${totalbalencefrmDB.round()}',
-                      style: const TextStyle(
-                          fontSize: 26.0,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: h * 0.02,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(
-                                    24.0,
-                                  )),
-                              padding: const EdgeInsets.all(6),
-                              child: const Icon(
-                                Icons.arrow_downward,
-                                color: Colors.green,
-                              ),
-                              margin: const EdgeInsets.only(right: 8.0),
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  'Income',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0,
-                                      color: Colors.white70),
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      incomefrmDB.round().toString(),
-                                      style: const TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white70),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 90,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(
-                                    24.0,
-                                  )),
-                              padding: const EdgeInsets.all(6),
-                              child: const Icon(
-                                Icons.arrow_upward,
-                                color: Colors.red,
-                              ),
-                              margin: const EdgeInsets.only(right: 8.0),
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  'Expense',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0,
-                                      color: Colors.white70),
-                                ),
-                                Text(
-                                  expensefrmDB.round().toString(),
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white70),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.deepPurple,
+                  Colors.blueAccent,
+                ]),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(24),
                 ),
               ),
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 15, top: 40),
-                  child: Text(
-                    "Recent Transactions...",
-                    style: TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-                child: ListView.separated(
-              itemBuilder: (ctx, index) {
-                final _value = newList[index];
-                return Slidable(
-                  key: Key(_value.id!),
-                  startActionPane: ActionPane(
-                    motion: const ScrollMotion(),
+                  const Text(
+                    'B A L A N C E',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Rs ${totalbalencefrmDB.round()}',
+                    style: const TextStyle(
+                        fontSize: 26.0,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: h * 0.02,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SlidableAction(
-                        onPressed: (ctx) {
-                          TransactionDB.instance.deleteTransancion(_value.id!);
-                          final amnt = _value.amount;
-                          if (_value.type == CategoryType.income) {
-                            homecardboxinScreentrans.put(
-                                'totalBalence',
-                                homecardboxinScreentrans.get('totalBalence') -
-                                    amnt);
-
-                            homecardboxinScreentrans.put('income',
-                                homecardboxinScreentrans.get('income') - amnt);
-
-                            //incometrans counter...
-                            // var  incomedlt=incometrans-1;
-                            //   transcounterintrans.put('incomecounter', transcounterintrans.get('incomecounter')-incomedlt);
-
-                            //   //overalltrans counter...
-                            //  var overalldlt=overalltrans-1;
-                            //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
-                          }
-                          if (_value.type == CategoryType.expense) {
-                            homecardboxinScreentrans.put(
-                                'totalBalence',
-                                homecardboxinScreentrans.get('totalBalence') +
-                                    amnt);
-
-                            homecardboxinScreentrans.put('expense',
-                                homecardboxinScreentrans.get('expense') - amnt);
-
-                            //expensetrans counter...
-                            //   var expensedlt=expensetrans-1;
-                            //   transcounterintrans.put('expensecounter', transcounterintrans.get('expensecounter')-expensedlt);
-
-                            //   //overalltrans counter...
-                            //    var overalldlt=overalltrans-1;
-                            //  transcounterintrans.put('overallcounter', transcounterintrans.get('overallcounter')-overalldlt);
-                          }
-                        },
-                        icon: Icons.delete,
-                        label: 'delete',
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white70,
+                                borderRadius: BorderRadius.circular(
+                                  24.0,
+                                )),
+                            padding: const EdgeInsets.all(6),
+                            child: const Icon(
+                              Icons.arrow_downward,
+                              color: Colors.green,
+                            ),
+                            margin: const EdgeInsets.only(right: 8.0),
+                          ),
+                          Column(
+                            children: [
+                              const Text(
+                                'Income',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0,
+                                    color: Colors.white70),
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    incomefrmDB.round().toString(),
+                                    style: const TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white70),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 90,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white70,
+                                borderRadius: BorderRadius.circular(
+                                  24.0,
+                                )),
+                            padding: const EdgeInsets.all(6),
+                            child: const Icon(
+                              Icons.arrow_upward,
+                              color: Colors.red,
+                            ),
+                            margin: const EdgeInsets.only(right: 8.0),
+                          ),
+                          Column(
+                            children: [
+                              const Text(
+                                'Expense',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0,
+                                    color: Colors.white70),
+                              ),
+                              Text(
+                                expensefrmDB.round().toString(),
+                                style: const TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white70),
+                              )
+                            ],
+                          )
+                        ],
                       ),
                     ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                      top: 10,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Card(
-                        elevation: 10,
-                        child: ListTile(
-                          tileColor: Colors.grey[200],
-                          leading: CircleAvatar(
-                            child: Text(
-                              parseDate(_value.date),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 14,
+                  )
+                ],
+              ),
+            ),
+            Consumer(
+              builder: (context, ref, child) => DayNavigator(
+                initialDate: DateTime.now(),
+                onDateChanged: (date) async {
+                  await TransactionDB.instance.filterTransactionsByDate(date);
+
+                  ref.read(selectedDateProvider.notifier).update(
+                        (state) => date,
+                      );
+                },
+              ),
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final selectedDate = ref.read(selectedDateProvider);
+
+                return Expanded(
+                    child: ListView.separated(
+                  itemBuilder: (ctx, index) {
+                    final _value = newList[index];
+
+                    return Slidable(
+                      key: Key(_value.id!),
+                      startActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (ctx) {
+                              TransactionDB.instance
+                                  .deleteTransancion(_value.id!);
+                              final amnt = _value.amount;
+                              if (_value.type == CategoryType.income) {
+                                homecardboxinScreentrans.put(
+                                    'totalBalence',
+                                    homecardboxinScreentrans
+                                            .get('totalBalence') -
+                                        amnt);
+
+                                homecardboxinScreentrans.put(
+                                    'income',
+                                    homecardboxinScreentrans.get('income') -
+                                        amnt);
+                              }
+                              if (_value.type == CategoryType.expense) {
+                                homecardboxinScreentrans.put(
+                                    'totalBalence',
+                                    homecardboxinScreentrans
+                                            .get('totalBalence') +
+                                        amnt);
+
+                                homecardboxinScreentrans.put(
+                                    'expense',
+                                    homecardboxinScreentrans.get('expense') -
+                                        amnt);
+                              }
+                            },
+                            icon: Icons.delete,
+                            label: 'delete',
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 10,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Card(
+                            elevation: 10,
+                            child: ListTile(
+                              tileColor: Colors.grey[200],
+                              leading: CircleAvatar(
+                                child: Text(
+                                  parseDate(_value.date),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                radius: (25),
+                                backgroundColor:
+                                    _value.type == CategoryType.income
+                                        ? Colors.green
+                                        : Colors.red,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                            radius: (25),
-                            backgroundColor: _value.type == CategoryType.income
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                          title: Text(
-                            'Rs  ${_value.amount}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Text(
-                            _value.purpose,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          trailing: Text(
-                            _value.category.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                              title: Text(
+                                'Rs  ${_value.amount}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                _value.purpose,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              trailing: Text(
+                                _value.category.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
+                    );
+                  },
+                  separatorBuilder: (ctx, index) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemCount: newList.length,
+                ));
               },
-              separatorBuilder: (ctx, index) {
-                return const SizedBox(
-                  height: 10,
-                );
-              },
-              itemCount: newList.length,
-            ))
+            )
           ]);
         });
   }
