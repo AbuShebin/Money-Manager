@@ -78,7 +78,6 @@ class _ScreenStatsState extends State<ScreenStats> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
         body: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,l̥M
       children: [

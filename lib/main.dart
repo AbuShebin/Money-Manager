@@ -8,6 +8,7 @@ import 'package:money_management_app/model/accounts/accounts_model.dart';
 import 'package:money_management_app/model/budget/budget_model.dart';
 import 'package:money_management_app/model/category/category_model.dart';
 import 'package:money_management_app/model/transaction/transaction_model.dart';
+import 'core/theme/app_theme.dart';
 import 'home/Screen_home.dart';
 
 Future<void> main() async {
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'money manager',
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      theme: Palette.lightTheme,
       home: Screenhome(),
       debugShowCheckedModeBanner: false,
     );

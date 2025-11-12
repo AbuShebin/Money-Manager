@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
 import 'package:money_management_app/core/common/widgets/custom_date_picker.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
-import 'package:money_management_app/core/theme/theme.dart';
+import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/core/utilities/custom_snackBar.dart';
 import 'package:money_management_app/core/utilities/formating/formatDate/format_dateTime.dart';
 import 'package:money_management_app/db/account/account_db.dart';
@@ -63,7 +63,6 @@ class _Add_transactionState extends State<Add_transaction> {
     final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       appBar: AppBar(),
       body: SafeArea(
         child: Column(
@@ -123,8 +122,8 @@ class _Add_transactionState extends State<Add_transaction> {
                 },
                 height: h * 0.05,
                 width: w,
-                backgroundColor: Palette.whiteColor,
-                textColor: Palette.blackColor,
+                backgroundColor: Palette.popWhite400,
+                textColor: Palette.popBlack500,
               );
             }),
             const SizedBox(
@@ -261,7 +260,7 @@ class _Add_transactionState extends State<Add_transaction> {
         showSnackBar(
             content: "Amount is required",
             context: context,
-            color: Palette.snackBarErrorColor);
+            color: Palette.error);
         return;
       }
 
@@ -273,7 +272,7 @@ class _Add_transactionState extends State<Add_transaction> {
         return showSnackBar(
             content: "Select category",
             context: context,
-            color: Palette.snackBarErrorColor);
+            color: Palette.error);
       }
 
       if (selectedAccount == null) {
@@ -281,7 +280,7 @@ class _Add_transactionState extends State<Add_transaction> {
         return showSnackBar(
             content: "Select an account",
             context: context,
-            color: Palette.snackBarErrorColor);
+            color: Palette.error);
       }
 
       final _parsedAmount = double.tryParse(_amountText);
@@ -352,7 +351,7 @@ class _Add_transactionState extends State<Add_transaction> {
             return showSnackBar(
                 content: "Somenthing went wrong - $e",
                 context: context,
-                color: Palette.snackBarErrorColor);
+                color: Palette.error);
           }
         },
       );
@@ -369,7 +368,7 @@ class _Add_transactionState extends State<Add_transaction> {
       showSnackBar(
           content: "Something went wrong: ${e.toString()}",
           context: context,
-          color: Palette.snackBarErrorColor);
+          color: Palette.error);
     }
   }
 

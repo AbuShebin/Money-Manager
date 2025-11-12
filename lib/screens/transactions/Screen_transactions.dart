@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management_app/core/common/global_variables.dart';
+import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
@@ -260,51 +261,44 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                           ),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: 10,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Card(
-                            elevation: 10,
-                            child: ListTile(
-                              tileColor: Colors.grey[200],
-                              leading: CircleAvatar(
-                                child: Text(
-                                  parseDate(_value.date),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                radius: (25),
-                                backgroundColor:
-                                    _value.type == CategoryType.income
-                                        ? Colors.green
-                                        : Colors.red,
-                              ),
-                              title: Text(
-                                'Rs  ${_value.amount}',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Card(
+                          elevation: 2,
+                          child: ListTile(
+                            tileColor: Palette.popWhite300,
+                            leading: CircleAvatar(
+                              child: Text(
+                                parseDate(_value.date),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              subtitle: Text(
-                                _value.purpose,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              radius: (25),
+                              backgroundColor:
+                                  _value.type == CategoryType.income
+                                      ? Colors.green
+                                      : Colors.red,
+                            ),
+                            title: Text(
+                              'Rs  ${_value.amount}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
-                              trailing: Text(
-                                _value.category.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            ),
+                            subtitle: Text(
+                              _value.purpose,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            trailing: Text(
+                              _value.category.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),

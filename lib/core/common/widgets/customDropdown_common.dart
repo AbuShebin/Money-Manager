@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:money_management_app/core/theme/theme.dart';
+import 'package:money_management_app/core/theme/app_theme.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
   final List<T> items;
@@ -67,7 +67,7 @@ class CustomSearchableDropdownState<T>
                         style: TextStyle(
                             fontFamily: 'Urbanist',
                             fontSize: w * 0.036,
-                            color: Palette.blackColor,
+                            color: Palette.popBlack500,
                             fontWeight: FontWeight.w800),
                       ),
                     ),
@@ -77,7 +77,7 @@ class CustomSearchableDropdownState<T>
               onChanged: widget.onChanged,
               buttonStyleData: ButtonStyleData(
                 decoration: BoxDecoration(
-                  color: Palette.backgroundColor,
+                  color: Palette.background,
                   borderRadius: BorderRadius.circular(w * 0.03),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: w * 0.04),
@@ -87,7 +87,7 @@ class CustomSearchableDropdownState<T>
               dropdownStyleData: DropdownStyleData(
                   maxHeight: h * .4,
                   decoration:
-                      const BoxDecoration(color: Palette.backgroundColor)),
+                      const BoxDecoration(color: Palette.background)),
               menuItemStyleData: MenuItemStyleData(
                 height: h * .06,
               ),      onMenuStateChange: (isOpen) {
