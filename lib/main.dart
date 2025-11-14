@@ -13,8 +13,6 @@ import 'home/Screen_home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // GoogleSheetsApi().init();
-  //await Firebase.initializeApp();
 
   await Hive.initFlutter();
   await Hive.openBox('HomeCarddb');

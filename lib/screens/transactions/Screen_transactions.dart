@@ -264,7 +264,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Card(
-                          elevation: 2,
+                          elevation: 1,
                           child: ListTile(
                             tileColor: Palette.popWhite300,
                             leading: CircleAvatar(

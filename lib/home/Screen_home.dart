@@ -36,7 +36,7 @@ class Screenhome extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        elevation: 30,
+        elevation: 0,
         onPressed: () {
           if (selectedindexnotifier.value == 0) {
             Navigator.of(context).push(

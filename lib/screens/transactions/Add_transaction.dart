@@ -116,7 +116,8 @@ class _Add_transactionState extends State<Add_transaction> {
               final selectedDate = ref.watch(selectedDateProvider);
 
               return CustomElevatedButton(
-                text: FormatDateTime.dateTimeToDDMMYYYY(selectedDate??DateTime.now()),
+                text: FormatDateTime.dateTimeToDDMMYYYY(
+                    selectedDate ?? DateTime.now()),
                 onPressed: () async {
                   selectDate(ref: ref);
                 },
@@ -253,7 +254,8 @@ class _Add_transactionState extends State<Add_transaction> {
       final _amountText = _amountcontroller.text;
       final _dropdownid = _categoryid;
       final selectedAccount = ref.read(selectedAccountProvider);
-      final selectedDate  = ref.read(selectedDateProvider);
+      final selectedDate = ref.read(selectedDateProvider);
+      double currentBalance = 0;
 
       ///validation
       if (_amountText.isEmpty) {
@@ -270,9 +272,7 @@ class _Add_transactionState extends State<Add_transaction> {
 
       if (_categoryid == null) {
         return showSnackBar(
-            content: "Select category",
-            context: context,
-            color: Palette.error);
+            content: "Select category", context: context, color: Palette.error);
       }
 
       if (selectedAccount == null) {
@@ -292,6 +292,15 @@ class _Add_transactionState extends State<Add_transaction> {
       }
       print("print check2");
 
+      final AccountsModel? accountData =
+          await AccountDB.instance.getSingleAccounts(id: selectedAccount.id);
+      if (accountData == null) {
+        print("Account model is null $accountData");
+        throw Exception("Account model is null $accountData");
+      }
+
+      currentBalance = double.parse(accountData.balance);
+
       //home card.......
       if (_selectedcategorytype == CategoryType.income) {
         print("print check 3");
@@ -309,6 +318,8 @@ class _Add_transactionState extends State<Add_transaction> {
         // addIncomeCard
         homecardboxinAddtrans.put(
             'income', homecardboxinAddtrans.get('income') + incometodb);
+
+        currentBalance += _parsedAmount;
       }
       if (_selectedcategorytype == CategoryType.expense) {
         expensetodb = expensetodb - _parsedAmount;
@@ -324,13 +335,15 @@ class _Add_transactionState extends State<Add_transaction> {
         //subtractExpense
         homecardboxinAddtrans.put(
             'expense', homecardboxinAddtrans.get('expense') - expensetodb);
+
+        currentBalance = currentBalance - _parsedAmount;
       }
       print("princt check 6 ${selectedAccount.runtimeType}");
 
       final _model = TransactionModel(
           purpose: _purposeText,
           amount: _parsedAmount,
-          date: selectedDate??DateTime.now(),
+          date: selectedDate ?? DateTime.now(),
           type: _selectedcategorytype!,
           category: _selectedcategoryModel!,
           accountsModel: selectedAccount);
@@ -338,14 +351,14 @@ class _Add_transactionState extends State<Add_transaction> {
       print("accounts model $_model");
 
       await TransactionDB.instance.addtransactions(_model).then(
-        (value) {
+        (value) async {
           print("update account triggered ${_parsedAmount}");
           try {
             AccountDB.instance.updateAccount(
                 data: AccountsModel(
                     id: _model.accountsModel.id,
                     name: selectedAccount.name,
-                    balance: _parsedAmount.toString(),
+                    balance: currentBalance.toString(),
                     type: selectedAccount.type));
           } catch (e) {
             return showSnackBar(
@@ -374,8 +387,8 @@ class _Add_transactionState extends State<Add_transaction> {
 
   selectDate({required WidgetRef ref}) async {
     final selectedDateNotifier = ref.read(selectedDateProvider.notifier);
-    final DateTime? _selectedDate =
-        await showDatePicker(context: context, firstDate: DateTime(2000), lastDate: DateTime(2050));
+    final DateTime? _selectedDate = await showDatePicker(
+        context: context, firstDate: DateTime(2000), lastDate: DateTime(2050));
 
     selectedDateNotifier.update(
       (state) => _selectedDate,

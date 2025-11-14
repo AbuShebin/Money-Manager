@@ -6,6 +6,7 @@ abstract class AccountDBFunctions {
   Future<void> addAccount({required AccountsModel data});
   Future<List<AccountsModel>> getAllAccounts();
   Future<void> updateAccount({required AccountsModel data});
+  Future<AccountsModel?> getSingleAccounts({required String id});
 }
 
 class AccountDB implements AccountDBFunctions {
@@ -75,4 +76,15 @@ class AccountDB implements AccountDBFunctions {
       print(e.toString());
     }
   }
+
+    @override
+  Future<AccountsModel?> getSingleAccounts({required String id})  async{
+    print("account id = $id");
+    final _db = await Hive.openBox<AccountsModel>("accounts_db");
+    print("📦 Current accounts in DB: ${_db.values.toList()}");
+    final AccountsModel accountData =  _db.values.where((element) => element.id == id,).first;
+
+    return accountData;
+  }
+
 }

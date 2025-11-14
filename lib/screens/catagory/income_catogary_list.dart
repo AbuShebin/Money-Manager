@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_management_app/core/theme/app_theme.dart';
 
 import '../../db/category/categor_db.dart';
 import '../../model/category/category_model.dart';
@@ -17,9 +18,8 @@ class Incomecategory extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Card(
-                  elevation: 8,
                   child: ListTile(
-                    tileColor: Colors.grey.shade200,
+                    tileColor: Palette.popWhite300,
                     title: Text(category.name),
                     trailing: IconButton(
                       onPressed: () {
