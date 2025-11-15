@@ -27,18 +27,22 @@ class _Screen_catagoryState extends State<Screen_catagory>
       body: SafeArea(
         child: Column(
           children: [
-            TabBar(
-              labelColor: Palette.popWhite500,
-              unselectedLabelColor: Palette.popWhite100,
-              controller: _tabcontroller,
-              tabs:const [
-                Tab(
-                  text: 'INCOME',
-                ),
-                Tab(
-                  text: 'EXPENSE',
-                ),
-              ],
+            Container(
+              color: Palette.popBlack500,
+              child: TabBar(
+                labelColor: Palette.popWhite500,
+                unselectedLabelColor: Palette.popWhite100,
+                indicatorColor: Palette.popWhite500,
+                controller: _tabcontroller,
+                tabs:const [
+                  Tab(
+                    text: 'INCOME',
+                  ),
+                  Tab(
+                    text: 'EXPENSE',
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: TabBarView(

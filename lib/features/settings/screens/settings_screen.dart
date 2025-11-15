@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_management_app/features/accounts/screens/accounts_screen.dart';
+import 'package:money_management_app/features/categories/screens/manage_categories.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -17,6 +18,13 @@ class SettingsScreen extends StatelessWidget {
               trailing: Icon(Icons.chevron_right),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>const ManageAccounts(),
+              )),
+            ),
+            ListTile(
+              title: Text("Categories"),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>const ManageCategoriesScreen(),
               )),
             )
           ],

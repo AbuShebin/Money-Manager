@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
 import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
-import 'package:money_management_app/core/common/widgets/custom_date_picker.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/core/utilities/custom_snackBar.dart';
@@ -93,6 +93,8 @@ class _Add_transactionState extends State<Add_transaction> {
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                 ),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+
               ),
             ),
 
@@ -240,7 +242,8 @@ class _Add_transactionState extends State<Add_transaction> {
                     savebutton(context, ref);
                   },
                   height: h * 0.05,
-                  width: w),
+                  width: w,
+                  backgroundColor: Palette.popBlack500,),
             )
           ],
         ),

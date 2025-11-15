@@ -20,7 +20,8 @@ class CategoryModel {
   final bool isDeleted;
   @HiveField(3)
   final CategoryType type;
-//final double limit;
+  @HiveField(4)
+  final String? parentId;
 
 //constructer.
   CategoryModel({
@@ -28,6 +29,7 @@ class CategoryModel {
     required this.name,
     required this.type,
     this.isDeleted = false,
+    this.parentId
   });
   @override
   String toString() {

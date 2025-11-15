@@ -50,19 +50,27 @@ class AddAccountScreen extends StatelessWidget {
   }
 
   addAccount({required BuildContext context}) async {
-    if(accountNameController.text.isEmpty){
-      return showSnackBar(content: "Account name is not provided", context: context, color: Palette.error);
-    }
-    AccountDB accountsDB = AccountDB();
-    AccountsModel data = AccountsModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: accountNameController.text,
-        balance: initialBalance.text,
-        type: "To be added while creating");
-    final result = await accountsDB.addAccount(data: data);
+    try {
+      if (accountNameController.text.isEmpty) {
+        return showSnackBar(
+            content: "Account name is not provided",
+            context: context,
+            color: Palette.error);
+      }
+      AccountDB accountsDB = AccountDB();
+      AccountsModel data = AccountsModel(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          name: accountNameController.text,
+          balance: initialBalance.text.toString(),
+          type: "To be added while creating");
+      final result = await accountsDB.addAccount(data: data);
 
-    if (result == true) {
-      Navigator.of(context).pop();
+      if (result == true) {
+        Navigator.of(context).pop();
+      }
+    } catch (e, s) {
+      print(e);
+      print(s);
     }
   }
 }

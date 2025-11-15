@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management_app/core/common/global_variables.dart';
+import 'package:money_management_app/core/constands/constands.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
@@ -106,7 +107,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                     height: 10,
                   ),
                   Text(
-                    'Rs ${totalbalencefrmDB.round()}',
+                    '${Constands().currency} ${totalbalencefrmDB.round()}',
                     style: const TextStyle(
                         fontSize: 26.0,
                         fontWeight: FontWeight.w700,
@@ -210,6 +211,8 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                         (state) => date,
                       );
                 },
+                textColor: Palette.popBlack500,
+                buttonColor: Palette.popBlack500,
               ),
             ),
             Consumer(
@@ -284,7 +287,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                                       : Colors.red,
                             ),
                             title: Text(
-                              'Rs  ${_value.amount}',
+                              '${Constands().currency} ${_value.amount}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),

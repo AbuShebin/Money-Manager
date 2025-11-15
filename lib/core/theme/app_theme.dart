@@ -51,7 +51,6 @@ class Palette {
       iconTheme: IconThemeData(color: popBlack300),
       titleTextStyle: TextStyle(
         color: popBlack300,
-        fontFamily: 'Urbanist',
         fontWeight: FontWeight.w600,
         fontSize: 20,
       ),
