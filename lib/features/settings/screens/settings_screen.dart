@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
               )),
             ),
             ListTile(
-              title: Text("Categories"),
+              title: Text("Manage categories"),
               trailing: Icon(Icons.chevron_right),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>const ManageCategoriesScreen(),

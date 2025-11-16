@@ -32,7 +32,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
           print("accounts data in account screen - $data");
 
           return data.isEmpty
-              ? Center(child: const Text("No accounts data"))
+              ?const Center(child: const Text("No accounts data"))
               : GridView.builder(
                 gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                   itemBuilder: (context, index) => Padding(

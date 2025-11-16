@@ -11,11 +11,11 @@ class Expensecategorylist extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable: CategoryDB().expenseCategoryListlistener,
         builder: (BuildContext ctx, List<CategoryModel> newlist, Widget? _) {
-          return ListView.separated(
+          return ListView.builder(
             itemBuilder: (ctx, index) {
               final category = newlist[index];
               return Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(left: 8.0,right: 8,top: 4),
                 child: Card(
                   child: ListTile(
                     tileColor: Palette.popWhite300,
@@ -28,11 +28,6 @@ class Expensecategorylist extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
-            },
-            separatorBuilder: (ctx, index) {
-              return const SizedBox(
-                height: 20,
               );
             },
             itemCount: newlist.length,

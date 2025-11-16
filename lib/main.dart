@@ -1,8 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_management_app/features/splash_screen/splash_screen.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
 import 'package:money_management_app/model/accounts/accounts_model.dart';
 import 'package:money_management_app/model/budget/budget_model.dart';
@@ -17,7 +16,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('HomeCarddb');
   await Hive.openBox('transactionscounter');
-  
+
   if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
     Hive.registerAdapter(
       CategoryModelAdapter(),
@@ -53,7 +52,7 @@ Future<void> main() async {
       HomeCardModelAdapter(),
     );
   }
- 
+
   if (!Hive.isAdapterRegistered(AccountsModelAdapter().typeId)) {
     Hive.registerAdapter(
       AccountsModelAdapter(),
@@ -71,7 +70,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'money manager',
       theme: Palette.lightTheme,
-      home: Screenhome(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/features/categories/controller/categories_controller.dart';
 import 'package:money_management_app/features/categories/provider/categories_provider.dart';
 
 class ManageCategoriesScreen extends StatelessWidget {
@@ -15,7 +14,11 @@ class ManageCategoriesScreen extends StatelessWidget {
           return ref.watch(categoriesAsyncNotifierProvider).when(
                 data: (data) => ListView.builder(
                   itemBuilder: (context, index) {
-                    return  ListTile(title: Text(data[index].name));
+                    return data.isEmpty
+                        ? const Center(
+                            child: Text("No categories"),
+                          )
+                        : ListTile(title: Text(data[index].name));
                   },
                   itemCount: data.length,
                 ),
