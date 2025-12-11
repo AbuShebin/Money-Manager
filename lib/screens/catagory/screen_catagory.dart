@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/screens/catagory/expense_catagory_list.dart';
@@ -28,11 +29,11 @@ class _Screen_catagoryState extends State<Screen_catagory>
         child: Column(
           children: [
             Container(
-              color: Palette.popBlack500,
+              color: AppPallette.popBlack500,
               child: TabBar(
-                labelColor: Palette.popWhite500,
-                unselectedLabelColor: Palette.popWhite100,
-                indicatorColor: Palette.popWhite500,
+                labelColor: AppPallette.popWhite500,
+                unselectedLabelColor: AppPallette.popWhite100,
+                indicatorColor: AppPallette.popWhite500,
                 controller: _tabcontroller,
                 tabs:const [
                   Tab(

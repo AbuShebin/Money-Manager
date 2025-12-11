@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_management_app/core/theme/theme_provider.dart';
 import 'package:money_management_app/features/splash_screen/splash_screen.dart';
 import 'package:money_management_app/model/HomeCard/Home_Card_model.dart';
 import 'package:money_management_app/model/accounts/accounts_model.dart';
@@ -58,18 +59,20 @@ Future<void> main() async {
       AccountsModelAdapter(),
     );
   }
-  runApp(const ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child:  MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'money manager',
-      theme: Palette.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      themeMode: ref.watch(themeProvider),
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );

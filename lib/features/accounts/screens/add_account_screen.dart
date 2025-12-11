@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_management_app/core/common/widgets/customDropdown_common.dart';
 import 'package:money_management_app/core/common/widgets/custom_elevated_button.dart';
 import 'package:money_management_app/core/common/widgets/custom_textformfield.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/core/utilities/custom_snackBar.dart';
 import 'package:money_management_app/db/account/account_db.dart';
@@ -40,7 +41,7 @@ class AddAccountScreen extends StatelessWidget {
           addAccount(context: context);
         },
         text: "Save",
-        backgroundColor: Palette.primary,
+        backgroundColor: AppPallette.darkBackground,
         textColor: Colors.white,
         width: w,
         height: h * 0.07,
@@ -55,7 +56,7 @@ class AddAccountScreen extends StatelessWidget {
         return showSnackBar(
             content: "Account name is not provided",
             context: context,
-            color: Palette.error);
+            color: AppPallette.error);
       }
       AccountDB accountsDB = AccountDB();
       AccountsModel data = AccountsModel(

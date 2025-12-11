@@ -1,78 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
+import 'package:money_management_app/core/theme/text_theme.dart';
 
-class Palette {
-  // POP BLACK
-  static const Color popBlack100 = Color(0xFF8A8A8A);
-  static const Color popBlack200 = Color(0xFF3D3D3D);
-  static const Color popBlack300 = Color(0xFF161616);
-  static const Color popBlack400 = Color(0xFF121212);
-  static const Color popBlack500 = Color(0xFF0D0D0D);
-
-  // POP WHITE
-  static const Color popWhite100 = Color(0xFFD2D2D2);
-  static const Color popWhite200 = Color(0xFFE0E0E0);
-  static const Color popWhite300 = Color(0xFFEFEFEF);
-  static const Color popWhite400 = Color(0xFFFBFBFB);
-  static const Color popWhite500 = Color(0xFFFFFFFF);
-
-  // Primary theme colors
-  static const Color primary = popBlack500;
-  static const Color background = popWhite400;
-  static const Color surface = popWhite500;
-  static const Color textPrimary = popBlack300;
-  static const Color accent = Color(0xFF8275EF); // CRED’s violet accent
-
-  // Feedback colors
-  static const Color success = Color(0xFF144CC7);
-  static const Color error = Color(0xFFEE4D37);
-
-  // Typography base
-  static const TextStyle baseTextStyle = TextStyle(
-    fontFamily: 'Urbanist',
-    fontWeight: FontWeight.w500,
-    color: textPrimary,
-  );
-
-  // Theme
+class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: background,
-    colorScheme: const ColorScheme.light(
-      background: background,
-      primary: primary,
-      surface: surface,
-      onPrimary: popWhite500,
-      onSurface: popBlack300,
-    ),
+    scaffoldBackgroundColor: AppPallette.lightBackground,
     appBarTheme: const AppBarTheme(
-      backgroundColor: background,
+      backgroundColor: AppPallette.lightSurface,
       elevation: 0,
-      iconTheme: IconThemeData(color: popBlack300),
+        iconTheme: IconThemeData(color: AppPallette.lightOnSurface),
       titleTextStyle: TextStyle(
-        color: popBlack300,
+        color: AppPallette.lightOnSurface,
         fontWeight: FontWeight.w600,
         fontSize: 20,
       ),
     ),
-    iconTheme: const IconThemeData(color: popBlack300, size: 28),
-    elevatedButtonTheme: ElevatedButtonThemeData(
+    textTheme: TTextTheme.lightTextTheme,
+    buttonTheme:const ButtonThemeData(buttonColor: AppPallette.darkSurface),
+    colorScheme: const ColorScheme.light(
+      primary: AppPallette.lightPrimary,
+      surface: AppPallette.lightSurface,
+      onPrimary: AppPallette.lightOnPrimary,
+      onSurface: AppPallette.lightOnSurface,
+    ),
+    elevatedButtonTheme: const ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: const WidgetStatePropertyAll(primary),
-        foregroundColor: const WidgetStatePropertyAll(popWhite500),
+        backgroundColor: WidgetStatePropertyAll(AppPallette.lightPrimary),
+        foregroundColor: WidgetStatePropertyAll(AppPallette.popWhite500),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
         ),
-        fixedSize: const WidgetStatePropertyAll(Size(120, 48)),
+        fixedSize: WidgetStatePropertyAll(Size(120, 48)),
       ),
     ),
-    textTheme: const TextTheme(
-      bodyLarge: baseTextStyle,
-      bodyMedium: baseTextStyle,
-      labelLarge: baseTextStyle,
-      titleMedium: baseTextStyle,
+    bottomNavigationBarTheme:const BottomNavigationBarThemeData(
+      backgroundColor: AppPallette.lightSurface,
+      selectedIconTheme: IconThemeData(color: AppPallette.lightPrimary),
+      unselectedIconTheme: IconThemeData(color: AppPallette.lightBackground)
     ),
+    floatingActionButtonTheme:const FloatingActionButtonThemeData(
+      backgroundColor: AppPallette.lightSurface,
+      foregroundColor: AppPallette.darkOnSurface
+    ),
+    listTileTheme:const ListTileThemeData(
+    tileColor: AppPallette.lightSurface,
+    iconColor: AppPallette.lightOnSurface,
+    textColor: AppPallette.lightOnSurface,
+    )
   );
+
+  static final ThemeData darkTheme = ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppPallette.darkPrimary,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppPallette.darkBackground,
+        elevation: 0,
+        iconTheme: IconThemeData(color: AppPallette.darkOnSurface),
+        titleTextStyle: TextStyle(
+          color: AppPallette.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
+        ),
+
+      ),
+      buttonTheme:const ButtonThemeData(buttonColor: AppPallette.lightSurface),
+      iconTheme: const IconThemeData(color: AppPallette.popBlack300, size: 28),
+      elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(AppPallette.darkBackground),
+          foregroundColor: WidgetStatePropertyAll(AppPallette.popWhite500),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+          ),
+          fixedSize: WidgetStatePropertyAll(Size(120, 48)),
+        ),
+      ),
+      textTheme: TTextTheme.lightTextTheme,
+      colorScheme: const ColorScheme.dark(
+      primary: AppPallette.darkPrimary,
+      surface: AppPallette.darkSurface,
+      onPrimary: AppPallette.darkOnPrimary,
+      onSurface: AppPallette.darkOnSurface,
+    ),
+    bottomNavigationBarTheme:const BottomNavigationBarThemeData(
+      backgroundColor: AppPallette.lightSurface,
+      selectedIconTheme: IconThemeData(color: AppPallette.lightPrimary),
+      unselectedIconTheme: IconThemeData(color: AppPallette.lightBackground),
+      selectedItemColor:  AppPallette.lightPrimary
+    ),
+    floatingActionButtonTheme:const FloatingActionButtonThemeData(
+      backgroundColor: AppPallette.darkSurface
+    ),
+    listTileTheme:const ListTileThemeData(
+    tileColor: AppPallette.darkSurface,
+    iconColor: AppPallette.darkOnSurface,
+    textColor: AppPallette.darkOnSurface,
+    )
+);
 }

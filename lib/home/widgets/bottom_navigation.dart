@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/home/Screen_home.dart';
 
@@ -12,11 +13,9 @@ class BottomNavigation extends StatelessWidget {
       builder: (BuildContext ctx, int updatedindex, Widget? _) {
         return ClipRRect(
           child: BottomNavigationBar(
-            backgroundColor: Palette.popBlack500,
             type: BottomNavigationBarType.fixed,
             currentIndex: updatedindex,
-            selectedItemColor: Palette.popWhite500,
-            unselectedItemColor: Palette.popWhite100,
+            unselectedItemColor: AppPallette.popWhite100,
             onTap: (newindex) {
               Screenhome.selectedindexnotifier.value = newindex;
             },

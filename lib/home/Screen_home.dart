@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_management_app/core/common/global_variables.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
 import 'package:money_management_app/core/theme/app_theme.dart';
 import 'package:money_management_app/features/settings/screens/settings_screen.dart';
 import 'package:money_management_app/home/widgets/bottom_navigation.dart';

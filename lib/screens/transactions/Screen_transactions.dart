@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management_app/core/common/global_variables.dart';
 import 'package:money_management_app/core/constands/constands.dart';
-import 'package:money_management_app/core/theme/app_theme.dart';
+import 'package:money_management_app/core/theme/app_pallette.dart';
 import 'package:money_management_app/db/category/categor_db.dart';
 import 'package:money_management_app/db/transactions/transaction_db.dart';
 import 'package:money_management_app/model/category/category_model.dart';
@@ -211,14 +211,13 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                         (state) => date,
                       );
                 },
-                textColor: Palette.popBlack500,
-                buttonColor: Palette.popBlack500,
+                textColor: Theme.of(context).colorScheme.onPrimary,
+                buttonColor: Theme.of(context).colorScheme.onSurface,
+                
               ),
             ),
             Consumer(
               builder: (context, ref, child) {
-                final selectedDate = ref.read(selectedDateProvider);
-
                 return Expanded(
                     child: ListView.separated(
                   itemBuilder: (ctx, index) {
@@ -269,7 +268,7 @@ class _Screen_transactionsState extends State<Screen_transactions> {
                         child: Card(
                           elevation: 1,
                           child: ListTile(
-                            tileColor: Palette.popWhite300,
+                            tileColor: AppPallette.popWhite300,
                             leading: CircleAvatar(
                               child: Text(
                                 parseDate(_value.date),

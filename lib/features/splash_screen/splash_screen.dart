@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPersistentFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         insertDefaultCategories();
         insertDefaultAccounts();
@@ -93,20 +93,20 @@ class _SplashScreenState extends State<SplashScreen> {
             name: "Others",
             type: CategoryType.expense),
       ];
-     await _db.addAll(incomeCategory);
+      await _db.addAll(incomeCategory);
     }
-Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => Screenhome(),
-              ),
-              (route) => false,
-            ),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => Screenhome(),
+      ),
+      (route) => false,
+    );
   }
 
   insertDefaultAccounts() async {
     final _db = await Hive.openBox<AccountsModel>("accounts_db");
-
-    ///arranging account data
+    if(_db.isEmpty){
+       ///arranging account data
     final List<AccountsModel> accountData = [
       AccountsModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -121,5 +121,8 @@ Navigator.of(context).pushAndRemoveUntil(
     ];
 
     _db.addAll(accountData);
+    }
+
+   
   }
 }

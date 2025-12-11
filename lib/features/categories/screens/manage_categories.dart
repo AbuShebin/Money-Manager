@@ -8,9 +8,11 @@ class ManageCategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title:const Text("Manage categories"),
+      ),
       body: Consumer(
-        builder: (context, ref, child) {
+        builder: (context, ref, child) { 
           return ref.watch(categoriesAsyncNotifierProvider).when(
                 data: (data) => ListView.builder(
                   itemBuilder: (context, index) {
@@ -18,7 +20,10 @@ class ManageCategoriesScreen extends StatelessWidget {
                         ? const Center(
                             child: Text("No categories"),
                           )
-                        : ListTile(title: Text(data[index].name));
+                        : Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0,left: 8,right: 8),
+                          child: ListTile(title: Text(data[index].name)),
+                        );
                   },
                   itemCount: data.length,
                 ),

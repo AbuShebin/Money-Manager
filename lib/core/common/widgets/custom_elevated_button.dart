@@ -4,8 +4,8 @@ import 'package:money_management_app/core/common/global_variables.dart';
 class CustomElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final Color backgroundColor;
-  final Color textColor;
+  final Color? backgroundColor;
+  final Color? textColor;
   final double borderRadius;
   final double padding;
   final double width;
@@ -17,7 +17,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.onPressed,
     required this.height,
     required this.width,
-    required this.backgroundColor,
+     this.backgroundColor,
     this.textColor = Colors.white,
     this.borderRadius = 12,
     this.padding = 14
